@@ -27,27 +27,33 @@ body {
 
 #app > * {
   display: grid;
-  grid-template-columns: 10% auto 10%;
-  grid-template-rows: auto 4rem auto auto;
+  grid-row-gap: 0.5rem;
+  grid-template-columns: [start] 10% [center] auto 10% [end];
+  grid-template-rows: [heading] auto [add-movie] auto [search-movies] auto [movie-list] auto auto;
 }
 
 .heading {
   background-color: lightgrey;
   font-size: 1.5rem;
   padding: 0.5rem;
-  grid-column-start: 1;
-  grid-column-end: 4;
-  grid-row: 1;
+  grid-column-start: start;
+  grid-column-end: end;
+  grid-row: heading;
+}
+
+.add-bar {
+  grid-column: center;
+  grid-row: add-movie;
 }
 
 .search-bar {
-  grid-column: 2;
-  grid-row: 2;
+  grid-column: center;
+  grid-row: search-movies;
 }
 
 .movie-list {
-  grid-column: 2;
-  grid-row: 3;
+  grid-column: center;
+  grid-row: movie-list;
 }
 
 .movie-list-entry {

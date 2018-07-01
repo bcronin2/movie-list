@@ -3,10 +3,6 @@ import PropTypes from "prop-types";
 import MovieListEntry from "./MovieListEntry.jsx";
 
 export default class MovieList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     let list = <div>Oops! No movies found.</div>;
 
