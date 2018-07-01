@@ -7,7 +7,7 @@ export default class MovieListEntry extends React.Component {
   }
 
   render() {
-    return <div>{this.props.movie["title"]}</div>;
+    return <div className="movie-list-entry">{this.props.movie["title"]}</div>;
   }
 }
 
