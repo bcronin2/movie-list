@@ -1,0 +1,46 @@
+@import url("http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css");
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+html {
+  height: 100vh;
+}
+
+body {
+  background: #f1f1f1 !important;
+  height: 100%;
+}
+
+#app {
+  height: 100%;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: 5rem auto;
+  padding: 0.5rem;
+  position: relative;
+}
+
+.movie-list {
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  grid-column: 2;
+  grid-row: 2;
+  padding: 0.5rem;
+}
+
+.movie-list > * {
+  padding: 0.5rem;
+}
+
+.movie-list-heading {
+  background-color: lightgrey;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+}
+
+.movie-list-entry {
+  padding-left: 0.5rem;
+}
