@@ -29,7 +29,7 @@ body {
   display: grid;
   grid-row-gap: 0.5rem;
   grid-template-columns: [start] 10% [center] auto 10% [end];
-  grid-template-rows: [heading] auto [add-movie] auto [search-movies] auto [movie-list] auto auto;
+  grid-template-rows: [heading] auto [add-movie] auto [search-movies] auto [filter] auto [movie-list] auto auto;
 }
 
 .heading {
@@ -51,10 +51,27 @@ body {
   grid-row: search-movies;
 }
 
+.filter {
+  grid-column: center;
+  grid-row: filter;
+}
+
 .movie-list {
   grid-column: center;
   grid-row: movie-list;
 }
 
 .movie-list-entry {
+}
+
+.filter > span {
+  padding: 0 0.2rem;
+}
+
+.filter > span:hover {
+  cursor: pointer;
+}
+
+.bold {
+  font-weight: 800;
 }
