@@ -2,6 +2,7 @@ import React from "React";
 import MovieList from "./MovieList.jsx";
 import Search from "./Search.jsx";
 import Add from "./Add.jsx";
+import IMDB from "../lib/IMDBSearch.js";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -17,22 +18,28 @@ export default class App extends React.Component {
     this.setState({ query: event.target.value.toLowerCase() });
   }
 
-  addMovie(event) {
+  updateMovieList(event) {
     if (event.key === "Enter" && !this.hasTitle(event.target.value)) {
-      this.state.movies.push({ title: event.target.value, watched: false });
-      this.refreshMovies();
+      IMDB.search(event.target.value, this.addMovie.bind(this));
       event.target.value = "";
+    }
+  }
+
+  addMovie(movie) {
+    if (movie) {
+      movie.watched = false;
+      this.state.movies.push(movie);
+      this.refreshMovieList();
+      // console.log(this.state.movies);
     }
   }
 
   toggleWatched(index) {
     this.state.movies[index].watched = !this.state.movies[index].watched;
-    this.refreshMovies();
+    this.refreshMovieList();
   }
 
-  // TODO: add state for toggling watched/not watched; filter movies accordingly
-
-  refreshMovies() {
+  refreshMovieList() {
     this.setState({ movies: this.state.movies });
   }
 
@@ -45,11 +52,10 @@ export default class App extends React.Component {
   }
 
   render() {
-    console.log(this.state.movies);
     return (
       <div>
         <div className="heading"> Movie List </div>
-        <Add add={this.addMovie.bind(this)} />
+        <Add add={this.updateMovieList.bind(this)} />
         <Search search={this.updateSearch.bind(this)} />
         <div className="filter">
           <span
