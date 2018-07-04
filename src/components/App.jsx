@@ -1,6 +1,6 @@
 import React from "React";
 import MovieList from "./MovieList.jsx";
-import Search from "./Search.jsx";
+import SearchCollection from "./SearchCollection.jsx";
 import FindAndAdd from "./FindAndAdd.jsx";
 import Filter from "./Filter.jsx";
 import IMDB from "../lib/IMDBSearch.js";
@@ -48,7 +48,7 @@ export default class App extends React.Component {
     this.setState({ movieList: this.state.movieList, databaseResults: [] });
     if (this.inputField) {
       this.inputField.value = "";
-      this.inputField.focus;
+      this.inputField.focus();
     }
   }
 
@@ -65,12 +65,14 @@ export default class App extends React.Component {
     return (
       <div>
         <div className="heading"> Movie List </div>
-        <FindAndAdd
-          search={this.searchDatabase.bind(this)}
-          results={this.state.databaseResults.slice(0, 5)}
-          select={this.addMovie.bind(this)}
-        />
-        <Search search={this.searchMovieList.bind(this)} />
+        <div className="inputs">
+          <FindAndAdd
+            search={this.searchDatabase.bind(this)}
+            results={this.state.databaseResults.slice(0, 5)}
+            select={this.addMovie.bind(this)}
+          />
+          <SearchCollection search={this.searchMovieList.bind(this)} />
+        </div>
         <Filter
           value={this.state.filterValue}
           values={this.props.filterValues}
