@@ -12,6 +12,8 @@ export default {
           return response.json();
         }
       })
-      .then(json => callback(json.results[0]));
+      .then(json => {
+        callback(json ? json.results : []);
+      });
   }
 };

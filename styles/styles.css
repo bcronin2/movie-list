@@ -64,6 +64,11 @@ body {
 .movie-list-entry {
 }
 
+.thumbnail {
+  max-height: 3rem;
+  width: auto;
+}
+
 .filter > span {
   padding: 0 0.2rem;
 }

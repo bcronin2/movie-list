@@ -6,12 +6,16 @@ export default class MovieListEntry extends React.Component {
     return (
       <div className="movie-list-entry">
         <div>
-          {this.props.movie["title"]}
+          <div>{this.props.movie["title"]}</div>
+          <img
+            className="thumbnail"
+            src={`${this.props.imageUrl}${this.props.movie["backdrop_path"]}`}
+          />
           <span>
             <input
               type="checkbox"
               checked={this.props.movie.watched ? "checked" : ""}
-              onClick={() => this.props.toggle(this.props.index)}
+              onChange={() => this.props.toggle(this.props.index)}
             />
           </span>
         </div>
@@ -22,4 +26,8 @@ export default class MovieListEntry extends React.Component {
 
 MovieListEntry.propTypes = {
   movie: PropTypes.object.isRequired
+};
+
+MovieListEntry.defaultProps = {
+  imageUrl: "https://image.tmdb.org/t/p/w500/"
 };
