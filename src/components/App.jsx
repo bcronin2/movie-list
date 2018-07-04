@@ -30,8 +30,8 @@ export default class App extends React.Component {
   }
 
   searchDatabase(event) {
+    this.inputField = event.target;
     IMDB.search(event.target.value, databaseResults => {
-      console.log(databaseResults);
       this.setState({ databaseResults: databaseResults });
     });
   }
@@ -46,6 +46,10 @@ export default class App extends React.Component {
 
   refreshMovieList() {
     this.setState({ movieList: this.state.movieList, databaseResults: [] });
+    if (this.inputField) {
+      this.inputField.value = "";
+      this.inputField.focus;
+    }
   }
 
   hasTitle(title) {
@@ -63,27 +67,31 @@ export default class App extends React.Component {
         <div className="heading"> Movie List </div>
         <FindAndAdd
           search={this.searchDatabase.bind(this)}
-          results={this.state.databaseResults}
+          results={this.state.databaseResults.slice(0, 5)}
           select={this.addMovie.bind(this)}
         />
-        <Search search={this.searchMovieList.bind(this, null)} />
+        <Search search={this.searchMovieList.bind(this)} />
         <Filter
           value={this.state.filterValue}
           values={this.props.filterValues}
           setValue={this.setFilterValue.bind(this)}
         />
         <MovieList
-          movies={this.state.movieList.filter(
-            movie =>
-              movie.title
-                .toLowerCase()
-                .match(this.state.movieListSearchQuery) &&
-              (this.state.filterValue === this.props.filterValues["all"] ||
-                (movie.watched &&
-                  this.state.filterValue === this.props.filterValues["seen"]) ||
-                (!movie.watched &&
-                  this.state.filterValue === this.props.filterValues["unseen"]))
-          )}
+          movies={this.state.movieList
+            .slice(0, 5)
+            .filter(
+              movie =>
+                movie.title
+                  .toLowerCase()
+                  .match(this.state.movieListSearchQuery) &&
+                (this.state.filterValue === this.props.filterValues["all"] ||
+                  (movie.watched &&
+                    this.state.filterValue ===
+                      this.props.filterValues["seen"]) ||
+                  (!movie.watched &&
+                    this.state.filterValue ===
+                      this.props.filterValues["unseen"]))
+            )}
           toggle={this.toggleWatched.bind(this)}
         />
       </div>

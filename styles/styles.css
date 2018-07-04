@@ -77,6 +77,24 @@ body {
   cursor: pointer;
 }
 
+.dropdown-list {
+  background-color: white;
+  border: 1px solid lightgrey;
+  position: absolute;
+  z-index: 100;
+}
+
+.dropdown-entry {
+  color: darkblue;
+  font-size: 0.8rem;
+}
+
+.dropdown-entry:hover {
+  background-color: darkblue;
+  color: white;
+  cursor: pointer;
+}
+
 .bold {
   font-weight: 800;
 }

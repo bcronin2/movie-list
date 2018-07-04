@@ -9,7 +9,7 @@ export default class MovieListEntry extends React.Component {
           <div>{this.props.movie["title"]}</div>
           <img
             className="thumbnail"
-            src={`${this.props.imageUrl}${this.props.movie["backdrop_path"]}`}
+            src={`${this.props.imageUrl}${this.props.movie["poster_path"]}`}
           />
           <span>
             <input

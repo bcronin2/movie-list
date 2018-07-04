@@ -8,11 +8,18 @@ export default class FindAndAdd extends React.Component {
         <input
           type="text"
           onKeyUp={this.props.search}
-          placeholder="Add movie"
+          placeholder="Find and add..."
         />
-        {this.props.results.map((result, index) => (
-          <div onClick={() => this.props.select(result)}>{result.title}</div>
-        ))}
+        <div className="dropdown-list">
+          {this.props.results.map((result, index) => (
+            <div
+              className="dropdown-entry"
+              onClick={() => this.props.select(result)}
+            >
+              {result.title}
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

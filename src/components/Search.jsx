@@ -8,7 +8,7 @@ export default class Search extends React.Component {
         <input
           type="text"
           onKeyUp={this.props.search}
-          placeholder="Search movies"
+          placeholder="Search collection..."
           autoFocus
         />
       </div>
