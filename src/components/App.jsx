@@ -65,12 +65,14 @@ export default class App extends React.Component {
     return (
       <div>
         <div className="heading"> Movie List </div>
-        <FindAndAdd
-          search={this.searchDatabase.bind(this)}
-          results={this.state.databaseResults.slice(0, 5)}
-          select={this.addMovie.bind(this)}
-        />
-        <Search search={this.searchMovieList.bind(this)} />
+        <div className="inputs">
+          <FindAndAdd
+            results={this.state.databaseResults.slice(0, 5)}
+            search={this.searchDatabase.bind(this)}
+            select={this.addMovie.bind(this)}
+          />
+          <Search search={this.searchMovieList.bind(this)} />
+        </div>
         <Filter
           value={this.state.filterValue}
           values={this.props.filterValues}

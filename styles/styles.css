@@ -1,3 +1,7 @@
+:root {
+  --shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 html {
   font-family: sans-serif;
   height: 100vh;
@@ -10,8 +14,8 @@ body {
 
 .container {
   display: grid;
-  grid-template-columns: 10% auto 10%;
-  grid-template-rows: 10% auto 50%;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: 10% auto auto;
   height: 100%;
   padding: 0.5rem;
   position: relative;
@@ -20,35 +24,41 @@ body {
 
 #app {
   background-color: white;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: var(--shadow);
   grid-column: 2;
   grid-row: 2;
 }
 
 #app > * {
   display: grid;
-  grid-row-gap: 0.5rem;
-  grid-template-columns: [start] 10% [center] auto 10% [end];
-  grid-template-rows: [heading] auto [add-movie] auto [search-movies] auto [filter] auto [movie-list] auto auto;
+  grid-row-gap: 0.8rem;
+  grid-template-columns: [start] 10% [center] 80% 10% [end];
+  grid-template-rows: [heading] auto [inputs] auto [filter] auto [movie-list] auto auto;
 }
 
 .heading {
   background-color: lightgrey;
   font-size: 1.5rem;
+  margin-bottom: 1rem;
   padding: 0.5rem;
   grid-column-start: start;
   grid-column-end: end;
   grid-row: heading;
 }
 
-.add-bar {
+.inputs {
+  display: grid;
   grid-column: center;
-  grid-row: add-movie;
+  grid-row: inputs;
+  grid-template-columns: [find-and-add] 50% [search-collection] 50%;
 }
 
-.search-bar {
-  grid-column: center;
-  grid-row: search-movies;
+.find-and-add {
+  grid-column: find-and-add;
+}
+
+.search-collection {
+  grid-column: search-collection;
 }
 
 .filter {
@@ -57,8 +67,11 @@ body {
 }
 
 .movie-list {
+  border: 2px lightgrey solid;
   grid-column: center;
   grid-row: movie-list;
+  padding: 0.5rem;
+  text-align: center;
 }
 
 .movie-list-entry {
@@ -70,16 +83,26 @@ body {
 }
 
 .filter > span {
-  padding: 0 0.2rem;
+  padding: 0 0.2rem 0 0;
 }
 
 .filter > span:hover {
   cursor: pointer;
 }
 
-.dropdown-list {
+input {
+  font-size: 1rem;
+}
+
+#database-search-input:focus + #database-search-dropdown-list {
+  display: block;
+}
+
+#database-search-dropdown-list {
   background-color: white;
   border: 1px solid lightgrey;
+  box-shadow: var(--shadow);
+  display: none;
   position: absolute;
   z-index: 100;
 }
@@ -87,6 +110,7 @@ body {
 .dropdown-entry {
   color: darkblue;
   font-size: 0.8rem;
+  padding: 0.4rem;
 }
 
 .dropdown-entry:hover {
