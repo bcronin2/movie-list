@@ -48,7 +48,7 @@ export default class App extends React.Component {
     this.setState({ movieList: this.state.movieList, databaseResults: [] });
     if (this.inputField) {
       this.inputField.value = "";
-      this.inputField.focus;
+      this.inputField.focus();
     }
   }
 
