@@ -1,5 +1,6 @@
 :root {
   --shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  --main-color: midnightblue;
 }
 
 html {
@@ -42,6 +43,7 @@ body {
   background-color: lightgrey;
   border-radius: 1rem 1rem 0 0;
   font-size: 1.5rem;
+  font-family: Cambria;
   margin-bottom: 1rem;
   padding: 0.8rem;
   grid-column-start: start;
@@ -96,12 +98,15 @@ body {
   cursor: pointer;
   visibility: hidden;
   width: fit-content;
-  background-color: darkslateblue;
+  background-color: var(--main-color);
   color: #fff;
+  opacity: 0.8;
   font-size: 0.6rem;
   text-align: center;
+  margin-left: 0.5rem;
   padding: 0.2rem;
   position: absolute;
+  transform: translate(-20px, -10px);
   z-index: 1;
 }
 
@@ -143,25 +148,24 @@ input {
   background-color: white;
   border: 1px solid lightgrey;
   box-shadow: var(--shadow);
-  /* min-width: 120px; */
   position: absolute;
   z-index: 100;
 }
 
 .dropdown-entry {
-  color: darkblue;
+  color: var(--main-color);
   font-size: 0.8rem;
   padding: 0.4rem;
 }
 
 .dropdown-entry:hover {
-  background-color: darkblue;
+  background-color: var(--main-color);
   color: white;
   cursor: pointer;
 }
 
 .selected {
-  background-color: darkslateblue;
+  background-color: var(--main-color);
   color: white;
   font-weight: 800;
 }

@@ -24,8 +24,8 @@ export default class App extends React.Component {
     this.setState({ filterValue: filterValue });
   }
 
-  toggleWatched(index) {
-    this.state.movieList[index].watched = !this.state.movieList[index].watched;
+  toggleWatched(movie) {
+    movie.watched = !movie.watched;
     this.refreshMovieList();
   }
 

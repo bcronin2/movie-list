@@ -15,6 +15,7 @@ export function FindAndAdd(props) {
         {props.results.map((result, index) => (
           <div
             key={index}
+            tabIndex={index}
             className="dropdown-entry"
             onClick={() => props.select(result)}
           >

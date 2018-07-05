@@ -29,7 +29,7 @@ export default class MovieListEntry extends React.Component {
             <input
               type="checkbox"
               checked={this.props.movie.watched ? "checked" : ""}
-              onChange={() => this.props.toggle(this.props.index)}
+              onChange={() => this.props.toggle(this.props.movie)}
             />
           </span>
           <img
