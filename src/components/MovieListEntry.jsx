@@ -1,25 +1,61 @@
 import React from "React";
 import PropTypes from "prop-types";
 
-export function MovieListEntry(props) {
-  return (
-    <div className="movie-list-entry">
-      <div>
-        <div>{props.movie["title"]}</div>
-        <img
-          className="thumbnail"
-          src={`${props.imageUrl}${props.movie["poster_path"]}`}
-        />
-        <span>
-          <input
-            type="checkbox"
-            checked={props.movie.watched ? "checked" : ""}
-            onChange={() => props.toggle(props.index)}
+export default class MovieListEntry extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { showDetails: false };
+  }
+
+  toggleDetails() {
+    this.setState({ showDetails: !this.state.showDetails });
+  }
+
+  render() {
+    let details = <div />;
+    if (this.state.showDetails) {
+      details = (
+        <div className="movie-list-entry-details">
+          <span className="movie-list-entry-metadata">
+            <div>
+              <span className="bold">Release year: </span>
+              {this.props.movie["release_date"].split("-")[0]}
+            </div>
+            <div>
+              <span className="bold">Rating: </span>
+              {this.props.movie["vote_average"]}
+            </div>
+            <span className="bold">Seen it? </span>
+            <input
+              type="checkbox"
+              checked={this.props.movie.watched ? "checked" : ""}
+              onChange={() => this.props.toggle(this.props.index)}
+            />
+          </span>
+          <img
+            className="movie-list-entry-thumbnail"
+            src={`${this.props.imageUrl}${this.props.movie["poster_path"] ||
+              "default"}`}
           />
-        </span>
+        </div>
+      );
+    }
+
+    return (
+      <div className="movie-list-entry">
+        <div
+          className="movie-list-entry-title"
+          onClick={this.toggleDetails.bind(this)}
+        >
+          {this.props.movie["title"]}
+          <span className="tooltip">
+            {this.state.showDetails ? "Hide" : "Show"} details
+          </span>
+        </div>
+        {details}
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 MovieListEntry.propTypes = {

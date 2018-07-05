@@ -1,6 +1,6 @@
 import React from "React";
 import PropTypes from "prop-types";
-import { MovieListEntry } from "./MovieListEntry.jsx";
+import MovieListEntry from "./MovieListEntry.jsx";
 
 export function MovieList(props) {
   let list = (list = props.movies.map((movie, index) => (
@@ -12,7 +12,7 @@ export function MovieList(props) {
     />
   )));
 
-  list = list.length ? list : <div>Oops! No movies found.</div>;
+  list = list.length ? list : <div>No movies found. Add some!</div>;
 
   return <div className="movie-list">{list}</div>;
 }

@@ -24,9 +24,11 @@ body {
 
 #app {
   background-color: white;
+  border-radius: 1rem;
   box-shadow: var(--shadow);
   grid-column: 2;
   grid-row: 2;
+  height: fit-content;
 }
 
 #app > * {
@@ -38,9 +40,10 @@ body {
 
 .heading {
   background-color: lightgrey;
+  border-radius: 1rem 1rem 0 0;
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  padding: 0.5rem;
+  padding: 0.8rem;
   grid-column-start: start;
   grid-column-end: end;
   grid-row: heading;
@@ -75,9 +78,48 @@ body {
 }
 
 .movie-list-entry {
+  background-color: lightgrey;
+  margin: 0.2rem;
+  padding: 0.2rem;
+  text-align: left;
 }
 
-.thumbnail {
+.movie-list-entry-title {
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  width: fit-content;
+}
+
+.movie-list-entry-title .tooltip {
+  cursor: pointer;
+  visibility: hidden;
+  width: fit-content;
+  background-color: black;
+  color: #fff;
+  font-size: 0.6rem;
+  text-align: center;
+  padding: 0.2rem;
+  position: absolute;
+  z-index: 1;
+}
+
+.movie-list-entry-title:hover .tooltip {
+  visibility: visible;
+}
+
+.movie-list-entry-details {
+  display: grid;
+  font-size: 0.9em;
+  grid-template-columns: [metadata] auto [thumbnail] auto;
+}
+
+.movie-list-entry-metadata {
+  grid-column: metadata;
+}
+
+.movie-list-entry-thumbnail {
+  align-self: end;
+  justify-self: end;
   max-height: 3rem;
   width: auto;
 }
@@ -98,6 +140,7 @@ input {
   background-color: white;
   border: 1px solid lightgrey;
   box-shadow: var(--shadow);
+  /* min-width: 120px; */
   position: absolute;
   z-index: 100;
 }

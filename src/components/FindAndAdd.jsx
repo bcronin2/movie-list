@@ -9,6 +9,7 @@ export function FindAndAdd(props) {
         id="database-search-input"
         onKeyUp={props.search}
         placeholder="Find and add..."
+        autoFocus
       />
       <div id="database-search-dropdown-list">
         {props.results.map((result, index) => (
