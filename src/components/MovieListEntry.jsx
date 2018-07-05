@@ -1,27 +1,25 @@
 import React from "React";
 import PropTypes from "prop-types";
 
-export default class MovieListEntry extends React.Component {
-  render() {
-    return (
-      <div className="movie-list-entry">
-        <div>
-          <div>{this.props.movie["title"]}</div>
-          <img
-            className="thumbnail"
-            src={`${this.props.imageUrl}${this.props.movie["poster_path"]}`}
+export function MovieListEntry(props) {
+  return (
+    <div className="movie-list-entry">
+      <div>
+        <div>{props.movie["title"]}</div>
+        <img
+          className="thumbnail"
+          src={`${props.imageUrl}${props.movie["poster_path"]}`}
+        />
+        <span>
+          <input
+            type="checkbox"
+            checked={props.movie.watched ? "checked" : ""}
+            onChange={() => props.toggle(props.index)}
           />
-          <span>
-            <input
-              type="checkbox"
-              checked={this.props.movie.watched ? "checked" : ""}
-              onChange={() => this.props.toggle(this.props.index)}
-            />
-          </span>
-        </div>
+        </span>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 MovieListEntry.propTypes = {

@@ -83,7 +83,7 @@ body {
 }
 
 .filter > span {
-  padding: 0 0.2rem 0 0;
+  padding-right: 0.2rem;
 }
 
 .filter > span:hover {
@@ -94,15 +94,10 @@ input {
   font-size: 1rem;
 }
 
-#database-search-input:focus + #database-search-dropdown-list {
-  display: block;
-}
-
 #database-search-dropdown-list {
   background-color: white;
   border: 1px solid lightgrey;
   box-shadow: var(--shadow);
-  display: none;
   position: absolute;
   z-index: 100;
 }

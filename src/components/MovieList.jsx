@@ -1,22 +1,20 @@
 import React from "React";
 import PropTypes from "prop-types";
-import MovieListEntry from "./MovieListEntry.jsx";
+import { MovieListEntry } from "./MovieListEntry.jsx";
 
-export default class MovieList extends React.Component {
-  render() {
-    let list = (list = this.props.movies.map((movie, index) => (
-      <MovieListEntry
-        key={index}
-        index={index}
-        movie={movie}
-        toggle={this.props.toggle}
-      />
-    )));
+export function MovieList(props) {
+  let list = (list = props.movies.map((movie, index) => (
+    <MovieListEntry
+      key={index}
+      index={index}
+      movie={movie}
+      toggle={props.toggle}
+    />
+  )));
 
-    list = list.length ? list : <div>Oops! No movies found.</div>;
+  list = list.length ? list : <div>Oops! No movies found.</div>;
 
-    return <div className="movie-list">{list}</div>;
-  }
+  return <div className="movie-list">{list}</div>;
 }
 
 MovieList.propTypes = {

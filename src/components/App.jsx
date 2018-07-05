@@ -1,8 +1,8 @@
 import React from "React";
-import MovieList from "./MovieList.jsx";
-import Search from "./Search.jsx";
-import FindAndAdd from "./FindAndAdd.jsx";
-import Filter from "./Filter.jsx";
+import { MovieList } from "./MovieList.jsx";
+import { SearchCollection } from "./SearchCollection.jsx";
+import { FindAndAdd } from "./FindAndAdd.jsx";
+import { Filter } from "./Filter.jsx";
 import IMDB from "../lib/IMDBSearch.js";
 
 export default class App extends React.Component {
@@ -67,11 +67,11 @@ export default class App extends React.Component {
         <div className="heading"> Movie List </div>
         <div className="inputs">
           <FindAndAdd
-            results={this.state.databaseResults.slice(0, 5)}
             search={this.searchDatabase.bind(this)}
+            results={this.state.databaseResults.slice(0, 5)}
             select={this.addMovie.bind(this)}
           />
-          <Search search={this.searchMovieList.bind(this)} />
+          <SearchCollection search={this.searchMovieList.bind(this)} />
         </div>
         <Filter
           value={this.state.filterValue}
