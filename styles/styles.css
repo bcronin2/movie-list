@@ -54,6 +54,7 @@ body {
   grid-column: center;
   grid-row: inputs;
   grid-template-columns: [find-and-add] 50% [search-collection] 50%;
+  margin-bottom: 1rem;
 }
 
 .find-and-add {
@@ -73,6 +74,7 @@ body {
   border: 2px lightgrey solid;
   grid-column: center;
   grid-row: movie-list;
+  margin-bottom: 1rem;
   padding: 0.5rem;
   text-align: center;
 }
@@ -94,7 +96,7 @@ body {
   cursor: pointer;
   visibility: hidden;
   width: fit-content;
-  background-color: black;
+  background-color: darkslateblue;
   color: #fff;
   font-size: 0.6rem;
   text-align: center;
@@ -125,7 +127,8 @@ body {
 }
 
 .filter > span {
-  padding-right: 0.2rem;
+  border-radius: 0.2rem;
+  padding: 0.5rem;
 }
 
 .filter > span:hover {
@@ -157,6 +160,8 @@ input {
   cursor: pointer;
 }
 
-.bold {
+.selected {
+  background-color: darkslateblue;
+  color: white;
   font-weight: 800;
 }
