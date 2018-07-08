@@ -19,11 +19,11 @@ export default class MovieListEntry extends React.Component {
           <span className="movie-list-entry-metadata">
             <div>
               <span className="bold">Release year: </span>
-              {this.props.movie["release_date"].split("-")[0]}
+              {this.props.movie.year}
             </div>
             <div>
               <span className="bold">Rating: </span>
-              {this.props.movie["vote_average"]}
+              {this.props.movie.rating}
             </div>
             <span className="bold">Seen it? </span>
             <input
@@ -34,8 +34,7 @@ export default class MovieListEntry extends React.Component {
           </span>
           <img
             className="movie-list-entry-thumbnail"
-            src={`${this.props.imageUrl}${this.props.movie["poster_path"] ||
-              "default"}`}
+            src={`${this.props.imageUrl}${this.props.movie.poster}`}
           />
         </div>
       );

@@ -4,6 +4,7 @@ import { Search } from "./Search.jsx";
 import { Filter } from "./Filter.jsx";
 import { FindAndAdd } from "./FindAndAdd.jsx";
 import IMDB from "../lib/IMDB.js";
+import movieCollection from "../lib/movieCollection.js";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -14,6 +15,36 @@ export default class App extends React.Component {
       filterValue: this.props.filterValues["all"],
       databaseResults: []
     };
+  }
+
+  addMovie(movie) {
+    if (movie && !this.hasTitle(movie.title)) {
+      movieCollection.post(movie, this.retrieveMovies.bind(this));
+      this.setState({ databaseResults: [] });
+    }
+  }
+
+  retrieveMovies() {
+    movieCollection.get(movies => {
+      this.setState.bind(this)({ movieList: movies });
+    });
+  }
+
+  // refreshMovieList(movies) {
+  //   this.setState({ movieList: movies, databaseResults: [] });
+  //   if (this.inputField) {
+  //     this.inputField.value = "";
+  //     this.inputField.focus();
+  //   }
+  // }
+
+  hasTitle(title) {
+    return this.state.movieList.reduce(
+      (containsMovie, currentMovie) =>
+        containsMovie ||
+        currentMovie.title.toLowerCase() === title.toLowerCase(),
+      false
+    );
   }
 
   handleMovieListSearch(event) {
@@ -34,31 +65,6 @@ export default class App extends React.Component {
     IMDB.search(event.target.value, databaseResults => {
       this.setState({ databaseResults: databaseResults });
     });
-  }
-
-  addMovie(movie) {
-    if (movie && !this.hasTitle(movie.title)) {
-      movie.watched = false;
-      this.state.movieList.push(movie);
-      this.refreshMovieList();
-    }
-  }
-
-  refreshMovieList() {
-    this.setState({ movieList: this.state.movieList, databaseResults: [] });
-    // if (this.inputField) {
-    //   this.inputField.value = "";
-    //   this.inputField.focus();
-    // }
-  }
-
-  hasTitle(title) {
-    return this.state.movieList.reduce(
-      (containsMovie, currentMovie) =>
-        containsMovie ||
-        currentMovie.title.toLowerCase() === title.toLowerCase(),
-      false
-    );
   }
 
   render() {

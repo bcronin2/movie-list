@@ -162,6 +162,10 @@ var _IMDB = __webpack_require__(/*! ../lib/IMDB.js */ "./client/src/lib/IMDB.js"
 
 var _IMDB2 = _interopRequireDefault(_IMDB);
 
+var _movieCollection = __webpack_require__(/*! ../lib/movieCollection.js */ "./client/src/lib/movieCollection.js");
+
+var _movieCollection2 = _interopRequireDefault(_movieCollection);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -188,6 +192,39 @@ var App = function (_React$Component) {
   }
 
   _createClass(App, [{
+    key: "addMovie",
+    value: function addMovie(movie) {
+      if (movie && !this.hasTitle(movie.title)) {
+        _movieCollection2.default.post(movie, this.retrieveMovies.bind(this));
+        this.setState({ databaseResults: [] });
+      }
+    }
+  }, {
+    key: "retrieveMovies",
+    value: function retrieveMovies() {
+      var _this2 = this;
+
+      _movieCollection2.default.get(function (movies) {
+        _this2.setState.bind(_this2)({ movieList: movies });
+      });
+    }
+
+    // refreshMovieList(movies) {
+    //   this.setState({ movieList: movies, databaseResults: [] });
+    //   if (this.inputField) {
+    //     this.inputField.value = "";
+    //     this.inputField.focus();
+    //   }
+    // }
+
+  }, {
+    key: "hasTitle",
+    value: function hasTitle(title) {
+      return this.state.movieList.reduce(function (containsMovie, currentMovie) {
+        return containsMovie || currentMovie.title.toLowerCase() === title.toLowerCase();
+      }, false);
+    }
+  }, {
     key: "handleMovieListSearch",
     value: function handleMovieListSearch(event) {
       this.setState({ movieListSearchQuery: event.target.value.toLowerCase() });
@@ -206,42 +243,17 @@ var App = function (_React$Component) {
   }, {
     key: "handleDatabaseSearch",
     value: function handleDatabaseSearch(event) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.inputField = event.target;
       _IMDB2.default.search(event.target.value, function (databaseResults) {
-        _this2.setState({ databaseResults: databaseResults });
+        _this3.setState({ databaseResults: databaseResults });
       });
-    }
-  }, {
-    key: "addMovie",
-    value: function addMovie(movie) {
-      if (movie && !this.hasTitle(movie.title)) {
-        movie.watched = false;
-        this.state.movieList.push(movie);
-        this.refreshMovieList();
-      }
-    }
-  }, {
-    key: "refreshMovieList",
-    value: function refreshMovieList() {
-      this.setState({ movieList: this.state.movieList, databaseResults: [] });
-      // if (this.inputField) {
-      //   this.inputField.value = "";
-      //   this.inputField.focus();
-      // }
-    }
-  }, {
-    key: "hasTitle",
-    value: function hasTitle(title) {
-      return this.state.movieList.reduce(function (containsMovie, currentMovie) {
-        return containsMovie || currentMovie.title.toLowerCase() === title.toLowerCase();
-      }, false);
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       return _React2.default.createElement(
         "div",
@@ -268,7 +280,7 @@ var App = function (_React$Component) {
         }),
         _React2.default.createElement(_MovieList.MovieList, {
           movies: this.state.movieList.filter(function (movie) {
-            return movie.title.toLowerCase().match(_this3.state.movieListSearchQuery) && (_this3.state.filterValue === _this3.props.filterValues["all"] || movie.watched && _this3.state.filterValue === _this3.props.filterValues["seen"] || !movie.watched && _this3.state.filterValue === _this3.props.filterValues["unseen"]);
+            return movie.title.toLowerCase().match(_this4.state.movieListSearchQuery) && (_this4.state.filterValue === _this4.props.filterValues["all"] || movie.watched && _this4.state.filterValue === _this4.props.filterValues["seen"] || !movie.watched && _this4.state.filterValue === _this4.props.filterValues["unseen"]);
           }),
           toggle: this.toggleWatched.bind(this)
         })
@@ -550,7 +562,7 @@ var MovieListEntry = function (_React$Component) {
                 { className: "bold" },
                 "Release year: "
               ),
-              this.props.movie["release_date"].split("-")[0]
+              this.props.movie.year
             ),
             _React2.default.createElement(
               "div",
@@ -560,7 +572,7 @@ var MovieListEntry = function (_React$Component) {
                 { className: "bold" },
                 "Rating: "
               ),
-              this.props.movie["vote_average"]
+              this.props.movie.rating
             ),
             _React2.default.createElement(
               "span",
@@ -577,7 +589,7 @@ var MovieListEntry = function (_React$Component) {
           ),
           _React2.default.createElement("img", {
             className: "movie-list-entry-thumbnail",
-            src: "" + this.props.imageUrl + (this.props.movie["poster_path"] || "default")
+            src: "" + this.props.imageUrl + this.props.movie.poster
           })
         );
       }
@@ -728,8 +740,47 @@ exports.default = {
       },
       body: JSON.stringify(data)
     }).then(function (response) {
-      return response.json();
+      return response;
     }).then(callback());
+  }
+};
+
+/***/ }),
+
+/***/ "./client/src/lib/movieCollection.js":
+/*!*******************************************!*\
+  !*** ./client/src/lib/movieCollection.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _httpRequest = __webpack_require__(/*! ./httpRequest.js */ "./client/src/lib/httpRequest.js");
+
+var _httpRequest2 = _interopRequireDefault(_httpRequest);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  endpoint: "/movies",
+  get: function get(callback) {
+    _httpRequest2.default.get(this.endpoint, callback);
+  },
+  post: function post(movie, callback) {
+    var movieObj = {
+      title: movie.title,
+      year: movie.release_date.split("-")[0],
+      rating: movie.vote_average,
+      poster: movie.poster_path || "default",
+      watched: false
+    };
+    _httpRequest2.default.post(this.endpoint, movieObj, callback);
   }
 };
 
