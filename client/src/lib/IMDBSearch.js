@@ -16,6 +16,9 @@ export default {
         .then(json => {
           callback(json ? json.results : []);
         });
+    } else {
+      console.log("no results");
+      callback([]);
     }
   }
 };

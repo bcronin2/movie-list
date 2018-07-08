@@ -1,8 +1,8 @@
 var path = require("path");
 
-var ENTRY_POINT = path.resolve(__dirname, "main.js");
+var ENTRY_POINT = path.resolve(__dirname, "client/main.js");
 
-var OUTPUT_PATH = path.resolve(__dirname, "dist");
+var OUTPUT_PATH = path.resolve(__dirname, "client/dist");
 
 var LOADER_OBJECT = [
   {

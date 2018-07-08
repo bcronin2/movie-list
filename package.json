@@ -2,13 +2,10 @@
   "name": "movie-list",
   "version": "1.0.0",
   "description": "",
-  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "setup": "curl -s https://raw.githubusercontent.com/reactorcore/pomander/master/bin/install | bash",
     "build": "webpack --mode production",
-    "start": "ttab live-server",
-    "dev": "ttab npm run build"
+    "start": "./server/main.js"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +24,8 @@
   },
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
     "prop-types": "^15.6.2"
   }
 }

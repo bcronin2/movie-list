@@ -81,15 +81,658 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./main.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./client/main.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "../node_modules/React/cjs/react.development.js":
-/*!******************************************************!*\
-  !*** ../node_modules/React/cjs/react.development.js ***!
-  \******************************************************/
+/***/ "./client/config/IMDB.js":
+/*!*******************************!*\
+  !*** ./client/config/IMDB.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+window.IMDB_API_KEY = "466ef7f2eba37ea246c81e2580f48e95";
+
+/***/ }),
+
+/***/ "./client/main.js":
+/*!************************!*\
+  !*** ./client/main.js ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(/*! ./src/styles/styles.css */ "./client/src/styles/styles.css");
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _App = __webpack_require__(/*! ./src/components/App.jsx */ "./client/src/components/App.jsx");
+
+var _App2 = _interopRequireDefault(_App);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.getElementById("app"));
+
+/***/ }),
+
+/***/ "./client/src/components/App.jsx":
+/*!***************************************!*\
+  !*** ./client/src/components/App.jsx ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _React = __webpack_require__(/*! React */ "./node_modules/React/index.js");
+
+var _React2 = _interopRequireDefault(_React);
+
+var _MovieList = __webpack_require__(/*! ./MovieList.jsx */ "./client/src/components/MovieList.jsx");
+
+var _Search = __webpack_require__(/*! ./Search.jsx */ "./client/src/components/Search.jsx");
+
+var _Filter = __webpack_require__(/*! ./Filter.jsx */ "./client/src/components/Filter.jsx");
+
+var _FindAndAdd = __webpack_require__(/*! ./FindAndAdd.jsx */ "./client/src/components/FindAndAdd.jsx");
+
+var _IMDBSearch = __webpack_require__(/*! ../lib/IMDBSearch.js */ "./client/src/lib/IMDBSearch.js");
+
+var _IMDBSearch2 = _interopRequireDefault(_IMDBSearch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var App = function (_React$Component) {
+  _inherits(App, _React$Component);
+
+  function App(props) {
+    _classCallCheck(this, App);
+
+    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+    _this.state = {
+      movieList: props.movieList,
+      movieListSearchQuery: "",
+      filterValue: _this.props.filterValues["all"],
+      databaseResults: []
+    };
+    return _this;
+  }
+
+  _createClass(App, [{
+    key: "handleMovieListSearch",
+    value: function handleMovieListSearch(event) {
+      this.setState({ movieListSearchQuery: event.target.value.toLowerCase() });
+    }
+  }, {
+    key: "setFilterValue",
+    value: function setFilterValue(filterValue) {
+      this.setState({ filterValue: filterValue });
+    }
+  }, {
+    key: "toggleWatched",
+    value: function toggleWatched(movie) {
+      movie.watched = !movie.watched;
+      this.refreshMovieList();
+    }
+  }, {
+    key: "handleDatabaseSearch",
+    value: function handleDatabaseSearch(event) {
+      var _this2 = this;
+
+      this.inputField = event.target;
+      _IMDBSearch2.default.search(event.target.value, function (databaseResults) {
+        _this2.setState({ databaseResults: databaseResults });
+      });
+    }
+  }, {
+    key: "addMovie",
+    value: function addMovie(movie) {
+      if (movie && !this.hasTitle(movie.title)) {
+        movie.watched = false;
+        this.state.movieList.push(movie);
+        this.refreshMovieList();
+      }
+    }
+  }, {
+    key: "refreshMovieList",
+    value: function refreshMovieList() {
+      this.setState({ movieList: this.state.movieList, databaseResults: [] });
+      if (this.inputField) {
+        this.inputField.value = "";
+        this.inputField.focus();
+      }
+    }
+  }, {
+    key: "hasTitle",
+    value: function hasTitle(title) {
+      return this.state.movieList.reduce(function (containsMovie, currentMovie) {
+        return containsMovie || currentMovie.title.toLowerCase() === title.toLowerCase();
+      }, false);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      return _React2.default.createElement(
+        "div",
+        null,
+        _React2.default.createElement(
+          "div",
+          { className: "heading" },
+          " My Movies "
+        ),
+        _React2.default.createElement(
+          "div",
+          { className: "inputs" },
+          _React2.default.createElement(_FindAndAdd.FindAndAdd, {
+            search: this.handleDatabaseSearch.bind(this),
+            results: this.state.databaseResults.slice(0, 5),
+            select: this.addMovie.bind(this)
+          }),
+          _React2.default.createElement(_Search.Search, { search: this.handleMovieListSearch.bind(this) })
+        ),
+        _React2.default.createElement(_Filter.Filter, {
+          value: this.state.filterValue,
+          values: this.props.filterValues,
+          setValue: this.setFilterValue.bind(this)
+        }),
+        _React2.default.createElement(_MovieList.MovieList, {
+          movies: this.state.movieList.filter(function (movie) {
+            return movie.title.toLowerCase().match(_this3.state.movieListSearchQuery) && (_this3.state.filterValue === _this3.props.filterValues["all"] || movie.watched && _this3.state.filterValue === _this3.props.filterValues["seen"] || !movie.watched && _this3.state.filterValue === _this3.props.filterValues["unseen"]);
+          }),
+          toggle: this.toggleWatched.bind(this)
+        })
+      );
+    }
+  }]);
+
+  return App;
+}(_React2.default.Component);
+
+exports.default = App;
+
+
+App.defaultProps = {
+  filterValues: { all: 2, seen: 1, unseen: 0 },
+  movieList: [
+    // { title: "Mean Girls", watched: false },
+    // { title: "Hackers", watched: false },
+    // { title: "The Grey", watched: false },
+    // { title: "Sunshine", watched: false },
+    // { title: "Ex Machina", watched: false }
+  ]
+};
+
+/***/ }),
+
+/***/ "./client/src/components/Filter.jsx":
+/*!******************************************!*\
+  !*** ./client/src/components/Filter.jsx ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Filter = Filter;
+
+var _React = __webpack_require__(/*! React */ "./node_modules/React/index.js");
+
+var _React2 = _interopRequireDefault(_React);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Filter(props) {
+  return _React2.default.createElement(
+    "div",
+    { className: "filter" },
+    _React2.default.createElement(
+      "span",
+      {
+        id: "all",
+        onClick: function onClick() {
+          return props.setValue(props.values["all"]);
+        },
+        className: props.value === props.values["all"] ? "selected" : ""
+      },
+      "All"
+    ),
+    _React2.default.createElement(
+      "span",
+      {
+        id: "seen",
+        onClick: function onClick() {
+          return props.setValue(props.values["seen"]);
+        },
+        className: props.value === props.values["seen"] ? "selected" : ""
+      },
+      "Seen"
+    ),
+    _React2.default.createElement(
+      "span",
+      {
+        id: "unseen",
+        onClick: function onClick() {
+          return props.setValue(props.values["unseen"]);
+        },
+        className: props.value === props.values["unseen"] ? "selected" : ""
+      },
+      "Unseen"
+    )
+  );
+}
+
+/***/ }),
+
+/***/ "./client/src/components/FindAndAdd.jsx":
+/*!**********************************************!*\
+  !*** ./client/src/components/FindAndAdd.jsx ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FindAndAdd = FindAndAdd;
+
+var _React = __webpack_require__(/*! React */ "./node_modules/React/index.js");
+
+var _React2 = _interopRequireDefault(_React);
+
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function FindAndAdd(props) {
+  return _React2.default.createElement(
+    "div",
+    { className: "find-and-add" },
+    _React2.default.createElement("input", {
+      type: "text",
+      id: "database-search-input",
+      onKeyUp: props.search,
+      placeholder: "Find and add...",
+      autoFocus: true
+    }),
+    _React2.default.createElement(
+      "div",
+      { id: "database-search-dropdown-list" },
+      props.results.map(function (result, index) {
+        return _React2.default.createElement(
+          "div",
+          {
+            key: index,
+            tabIndex: index,
+            className: "dropdown-entry",
+            onClick: function onClick() {
+              return props.select(result);
+            }
+          },
+          result.title
+        );
+      })
+    )
+  );
+}
+
+FindAndAdd.propTypes = {
+  search: _propTypes2.default.func.isRequired,
+  results: _propTypes2.default.array.isRequired
+};
+
+/***/ }),
+
+/***/ "./client/src/components/MovieList.jsx":
+/*!*********************************************!*\
+  !*** ./client/src/components/MovieList.jsx ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.MovieList = MovieList;
+
+var _React = __webpack_require__(/*! React */ "./node_modules/React/index.js");
+
+var _React2 = _interopRequireDefault(_React);
+
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _MovieListEntry = __webpack_require__(/*! ./MovieListEntry.jsx */ "./client/src/components/MovieListEntry.jsx");
+
+var _MovieListEntry2 = _interopRequireDefault(_MovieListEntry);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function MovieList(props) {
+  var list = list = props.movies.map(function (movie, index) {
+    return _React2.default.createElement(_MovieListEntry2.default, {
+      key: index,
+      index: index,
+      movie: movie,
+      toggle: props.toggle
+    });
+  });
+
+  list = list.length ? list : _React2.default.createElement(
+    "div",
+    null,
+    "No movies found. Add some!"
+  );
+
+  return _React2.default.createElement(
+    "div",
+    { className: "movie-list" },
+    list
+  );
+}
+
+MovieList.propTypes = {
+  movies: _propTypes2.default.array.isRequired
+};
+
+/***/ }),
+
+/***/ "./client/src/components/MovieListEntry.jsx":
+/*!**************************************************!*\
+  !*** ./client/src/components/MovieListEntry.jsx ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _React = __webpack_require__(/*! React */ "./node_modules/React/index.js");
+
+var _React2 = _interopRequireDefault(_React);
+
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MovieListEntry = function (_React$Component) {
+  _inherits(MovieListEntry, _React$Component);
+
+  function MovieListEntry(props) {
+    _classCallCheck(this, MovieListEntry);
+
+    var _this = _possibleConstructorReturn(this, (MovieListEntry.__proto__ || Object.getPrototypeOf(MovieListEntry)).call(this, props));
+
+    _this.state = { showDetails: false };
+    return _this;
+  }
+
+  _createClass(MovieListEntry, [{
+    key: "toggleDetails",
+    value: function toggleDetails() {
+      this.setState({ showDetails: !this.state.showDetails });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var details = _React2.default.createElement("div", null);
+      if (this.state.showDetails) {
+        details = _React2.default.createElement(
+          "div",
+          { className: "movie-list-entry-details" },
+          _React2.default.createElement(
+            "span",
+            { className: "movie-list-entry-metadata" },
+            _React2.default.createElement(
+              "div",
+              null,
+              _React2.default.createElement(
+                "span",
+                { className: "bold" },
+                "Release year: "
+              ),
+              this.props.movie["release_date"].split("-")[0]
+            ),
+            _React2.default.createElement(
+              "div",
+              null,
+              _React2.default.createElement(
+                "span",
+                { className: "bold" },
+                "Rating: "
+              ),
+              this.props.movie["vote_average"]
+            ),
+            _React2.default.createElement(
+              "span",
+              { className: "bold" },
+              "Seen it? "
+            ),
+            _React2.default.createElement("input", {
+              type: "checkbox",
+              checked: this.props.movie.watched ? "checked" : "",
+              onChange: function onChange() {
+                return _this2.props.toggle(_this2.props.movie);
+              }
+            })
+          ),
+          _React2.default.createElement("img", {
+            className: "movie-list-entry-thumbnail",
+            src: "" + this.props.imageUrl + (this.props.movie["poster_path"] || "default")
+          })
+        );
+      }
+
+      return _React2.default.createElement(
+        "div",
+        { className: "movie-list-entry" },
+        _React2.default.createElement(
+          "div",
+          {
+            className: "movie-list-entry-title",
+            onClick: this.toggleDetails.bind(this)
+          },
+          this.props.movie["title"],
+          _React2.default.createElement(
+            "span",
+            { className: "tooltip" },
+            this.state.showDetails ? "Hide" : "Show",
+            " details"
+          )
+        ),
+        details
+      );
+    }
+  }]);
+
+  return MovieListEntry;
+}(_React2.default.Component);
+
+exports.default = MovieListEntry;
+
+
+MovieListEntry.propTypes = {
+  movie: _propTypes2.default.object.isRequired
+};
+
+MovieListEntry.defaultProps = {
+  imageUrl: "https://image.tmdb.org/t/p/w500/"
+};
+
+/***/ }),
+
+/***/ "./client/src/components/Search.jsx":
+/*!******************************************!*\
+  !*** ./client/src/components/Search.jsx ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Search = Search;
+
+var _React = __webpack_require__(/*! React */ "./node_modules/React/index.js");
+
+var _React2 = _interopRequireDefault(_React);
+
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Search(props) {
+  return _React2.default.createElement(
+    "div",
+    { className: "search-collection" },
+    _React2.default.createElement("input", {
+      type: "text",
+      onKeyUp: props.search,
+      placeholder: "Search collection..."
+    })
+  );
+}
+
+Search.propTypes = {
+  search: _propTypes2.default.func.isRequired
+};
+
+/***/ }),
+
+/***/ "./client/src/lib/IMDBSearch.js":
+/*!**************************************!*\
+  !*** ./client/src/lib/IMDBSearch.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+__webpack_require__(/*! ../../config/IMDB.js */ "./client/config/IMDB.js");
+
+exports.default = {
+  endpoint: "https://api.themoviedb.org/3/search/movie?api_key=" + window.IMDB_API_KEY,
+  search: function search(title, callback) {
+    if (title) {
+      window.fetch(this.endpoint + "&query=" + title).then(function (response) {
+        if (response.ok) {
+          return response.json();
+        }
+      }).then(function (json) {
+        callback(json ? json.results : []);
+      });
+    } else {
+      console.log("no results");
+      callback([]);
+    }
+  }
+};
+
+/***/ }),
+
+/***/ "./client/src/styles/styles.css":
+/*!**************************************!*\
+  !*** ./client/src/styles/styles.css ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!./styles.css */ "./node_modules/css-loader/index.js!./client/src/styles/styles.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/React/cjs/react.development.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/React/cjs/react.development.js ***!
+  \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -111,12 +754,12 @@ if (true) {
   (function() {
 'use strict';
 
-var _assign = __webpack_require__(/*! object-assign */ "../node_modules/object-assign/index.js");
-var invariant = __webpack_require__(/*! fbjs/lib/invariant */ "../node_modules/fbjs/lib/invariant.js");
-var emptyObject = __webpack_require__(/*! fbjs/lib/emptyObject */ "../node_modules/fbjs/lib/emptyObject.js");
-var warning = __webpack_require__(/*! fbjs/lib/warning */ "../node_modules/fbjs/lib/warning.js");
-var emptyFunction = __webpack_require__(/*! fbjs/lib/emptyFunction */ "../node_modules/fbjs/lib/emptyFunction.js");
-var checkPropTypes = __webpack_require__(/*! prop-types/checkPropTypes */ "../node_modules/prop-types/checkPropTypes.js");
+var _assign = __webpack_require__(/*! object-assign */ "./node_modules/object-assign/index.js");
+var invariant = __webpack_require__(/*! fbjs/lib/invariant */ "./node_modules/fbjs/lib/invariant.js");
+var emptyObject = __webpack_require__(/*! fbjs/lib/emptyObject */ "./node_modules/fbjs/lib/emptyObject.js");
+var warning = __webpack_require__(/*! fbjs/lib/warning */ "./node_modules/fbjs/lib/warning.js");
+var emptyFunction = __webpack_require__(/*! fbjs/lib/emptyFunction */ "./node_modules/fbjs/lib/emptyFunction.js");
+var checkPropTypes = __webpack_require__(/*! prop-types/checkPropTypes */ "./node_modules/prop-types/checkPropTypes.js");
 
 // TODO: this is special because it gets imported during build.
 
@@ -1584,10 +2227,10 @@ module.exports = react;
 
 /***/ }),
 
-/***/ "../node_modules/React/index.js":
-/*!**************************************!*\
-  !*** ../node_modules/React/index.js ***!
-  \**************************************/
+/***/ "./node_modules/React/index.js":
+/*!*************************************!*\
+  !*** ./node_modules/React/index.js ***!
+  \*************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1595,20 +2238,20 @@ module.exports = react;
 
 
 if (false) {} else {
-  module.exports = __webpack_require__(/*! ./cjs/react.development.js */ "../node_modules/React/cjs/react.development.js");
+  module.exports = __webpack_require__(/*! ./cjs/react.development.js */ "./node_modules/React/cjs/react.development.js");
 }
 
 
 /***/ }),
 
-/***/ "../node_modules/css-loader/index.js!./src/styles/styles.css":
-/*!**********************************************************!*\
-  !*** ../node_modules/css-loader!./src/styles/styles.css ***!
-  \**********************************************************/
+/***/ "./node_modules/css-loader/index.js!./client/src/styles/styles.css":
+/*!****************************************************************!*\
+  !*** ./node_modules/css-loader!./client/src/styles/styles.css ***!
+  \****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "../node_modules/css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -1620,10 +2263,10 @@ exports.push([module.i, ":root {\n  --shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 
 
 /***/ }),
 
-/***/ "../node_modules/css-loader/lib/css-base.js":
-/*!**************************************************!*\
-  !*** ../node_modules/css-loader/lib/css-base.js ***!
-  \**************************************************/
+/***/ "./node_modules/css-loader/lib/css-base.js":
+/*!*************************************************!*\
+  !*** ./node_modules/css-loader/lib/css-base.js ***!
+  \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -1707,10 +2350,10 @@ function toComment(sourceMap) {
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/ExecutionEnvironment.js":
-/*!********************************************************!*\
-  !*** ../node_modules/fbjs/lib/ExecutionEnvironment.js ***!
-  \********************************************************/
+/***/ "./node_modules/fbjs/lib/ExecutionEnvironment.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/fbjs/lib/ExecutionEnvironment.js ***!
+  \*******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1751,10 +2394,10 @@ module.exports = ExecutionEnvironment;
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/camelize.js":
-/*!********************************************!*\
-  !*** ../node_modules/fbjs/lib/camelize.js ***!
-  \********************************************/
+/***/ "./node_modules/fbjs/lib/camelize.js":
+/*!*******************************************!*\
+  !*** ./node_modules/fbjs/lib/camelize.js ***!
+  \*******************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1791,10 +2434,10 @@ module.exports = camelize;
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/camelizeStyleName.js":
-/*!*****************************************************!*\
-  !*** ../node_modules/fbjs/lib/camelizeStyleName.js ***!
-  \*****************************************************/
+/***/ "./node_modules/fbjs/lib/camelizeStyleName.js":
+/*!****************************************************!*\
+  !*** ./node_modules/fbjs/lib/camelizeStyleName.js ***!
+  \****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1810,7 +2453,7 @@ module.exports = camelize;
 
 
 
-var camelize = __webpack_require__(/*! ./camelize */ "../node_modules/fbjs/lib/camelize.js");
+var camelize = __webpack_require__(/*! ./camelize */ "./node_modules/fbjs/lib/camelize.js");
 
 var msPattern = /^-ms-/;
 
@@ -1839,10 +2482,10 @@ module.exports = camelizeStyleName;
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/containsNode.js":
-/*!************************************************!*\
-  !*** ../node_modules/fbjs/lib/containsNode.js ***!
-  \************************************************/
+/***/ "./node_modules/fbjs/lib/containsNode.js":
+/*!***********************************************!*\
+  !*** ./node_modules/fbjs/lib/containsNode.js ***!
+  \***********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1858,7 +2501,7 @@ module.exports = camelizeStyleName;
  * 
  */
 
-var isTextNode = __webpack_require__(/*! ./isTextNode */ "../node_modules/fbjs/lib/isTextNode.js");
+var isTextNode = __webpack_require__(/*! ./isTextNode */ "./node_modules/fbjs/lib/isTextNode.js");
 
 /*eslint-disable no-bitwise */
 
@@ -1887,10 +2530,10 @@ module.exports = containsNode;
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/emptyFunction.js":
-/*!*************************************************!*\
-  !*** ../node_modules/fbjs/lib/emptyFunction.js ***!
-  \*************************************************/
+/***/ "./node_modules/fbjs/lib/emptyFunction.js":
+/*!************************************************!*\
+  !*** ./node_modules/fbjs/lib/emptyFunction.js ***!
+  \************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1934,10 +2577,10 @@ module.exports = emptyFunction;
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/emptyObject.js":
-/*!***********************************************!*\
-  !*** ../node_modules/fbjs/lib/emptyObject.js ***!
-  \***********************************************/
+/***/ "./node_modules/fbjs/lib/emptyObject.js":
+/*!**********************************************!*\
+  !*** ./node_modules/fbjs/lib/emptyObject.js ***!
+  \**********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1962,10 +2605,10 @@ module.exports = emptyObject;
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/getActiveElement.js":
-/*!****************************************************!*\
-  !*** ../node_modules/fbjs/lib/getActiveElement.js ***!
-  \****************************************************/
+/***/ "./node_modules/fbjs/lib/getActiveElement.js":
+/*!***************************************************!*\
+  !*** ./node_modules/fbjs/lib/getActiveElement.js ***!
+  \***************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2009,10 +2652,10 @@ module.exports = getActiveElement;
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/hyphenate.js":
-/*!*********************************************!*\
-  !*** ../node_modules/fbjs/lib/hyphenate.js ***!
-  \*********************************************/
+/***/ "./node_modules/fbjs/lib/hyphenate.js":
+/*!********************************************!*\
+  !*** ./node_modules/fbjs/lib/hyphenate.js ***!
+  \********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2050,10 +2693,10 @@ module.exports = hyphenate;
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/hyphenateStyleName.js":
-/*!******************************************************!*\
-  !*** ../node_modules/fbjs/lib/hyphenateStyleName.js ***!
-  \******************************************************/
+/***/ "./node_modules/fbjs/lib/hyphenateStyleName.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/fbjs/lib/hyphenateStyleName.js ***!
+  \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2069,7 +2712,7 @@ module.exports = hyphenate;
 
 
 
-var hyphenate = __webpack_require__(/*! ./hyphenate */ "../node_modules/fbjs/lib/hyphenate.js");
+var hyphenate = __webpack_require__(/*! ./hyphenate */ "./node_modules/fbjs/lib/hyphenate.js");
 
 var msPattern = /^ms-/;
 
@@ -2097,10 +2740,10 @@ module.exports = hyphenateStyleName;
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/invariant.js":
-/*!*********************************************!*\
-  !*** ../node_modules/fbjs/lib/invariant.js ***!
-  \*********************************************/
+/***/ "./node_modules/fbjs/lib/invariant.js":
+/*!********************************************!*\
+  !*** ./node_modules/fbjs/lib/invariant.js ***!
+  \********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2161,10 +2804,10 @@ module.exports = invariant;
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/isNode.js":
-/*!******************************************!*\
-  !*** ../node_modules/fbjs/lib/isNode.js ***!
-  \******************************************/
+/***/ "./node_modules/fbjs/lib/isNode.js":
+/*!*****************************************!*\
+  !*** ./node_modules/fbjs/lib/isNode.js ***!
+  \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2194,10 +2837,10 @@ module.exports = isNode;
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/isTextNode.js":
-/*!**********************************************!*\
-  !*** ../node_modules/fbjs/lib/isTextNode.js ***!
-  \**********************************************/
+/***/ "./node_modules/fbjs/lib/isTextNode.js":
+/*!*********************************************!*\
+  !*** ./node_modules/fbjs/lib/isTextNode.js ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2213,7 +2856,7 @@ module.exports = isNode;
  * @typechecks
  */
 
-var isNode = __webpack_require__(/*! ./isNode */ "../node_modules/fbjs/lib/isNode.js");
+var isNode = __webpack_require__(/*! ./isNode */ "./node_modules/fbjs/lib/isNode.js");
 
 /**
  * @param {*} object The object to check.
@@ -2227,10 +2870,10 @@ module.exports = isTextNode;
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/shallowEqual.js":
-/*!************************************************!*\
-  !*** ../node_modules/fbjs/lib/shallowEqual.js ***!
-  \************************************************/
+/***/ "./node_modules/fbjs/lib/shallowEqual.js":
+/*!***********************************************!*\
+  !*** ./node_modules/fbjs/lib/shallowEqual.js ***!
+  \***********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2303,10 +2946,10 @@ module.exports = shallowEqual;
 
 /***/ }),
 
-/***/ "../node_modules/fbjs/lib/warning.js":
-/*!*******************************************!*\
-  !*** ../node_modules/fbjs/lib/warning.js ***!
-  \*******************************************/
+/***/ "./node_modules/fbjs/lib/warning.js":
+/*!******************************************!*\
+  !*** ./node_modules/fbjs/lib/warning.js ***!
+  \******************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2321,7 +2964,7 @@ module.exports = shallowEqual;
 
 
 
-var emptyFunction = __webpack_require__(/*! ./emptyFunction */ "../node_modules/fbjs/lib/emptyFunction.js");
+var emptyFunction = __webpack_require__(/*! ./emptyFunction */ "./node_modules/fbjs/lib/emptyFunction.js");
 
 /**
  * Similar to invariant but only logs a warning if the condition is not met.
@@ -2376,10 +3019,10 @@ module.exports = warning;
 
 /***/ }),
 
-/***/ "../node_modules/object-assign/index.js":
-/*!**********************************************!*\
-  !*** ../node_modules/object-assign/index.js ***!
-  \**********************************************/
+/***/ "./node_modules/object-assign/index.js":
+/*!*********************************************!*\
+  !*** ./node_modules/object-assign/index.js ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2478,10 +3121,10 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 /***/ }),
 
-/***/ "../node_modules/prop-types/checkPropTypes.js":
-/*!****************************************************!*\
-  !*** ../node_modules/prop-types/checkPropTypes.js ***!
-  \****************************************************/
+/***/ "./node_modules/prop-types/checkPropTypes.js":
+/*!***************************************************!*\
+  !*** ./node_modules/prop-types/checkPropTypes.js ***!
+  \***************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2498,7 +3141,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 var printWarning = function() {};
 
 if (true) {
-  var ReactPropTypesSecret = __webpack_require__(/*! ./lib/ReactPropTypesSecret */ "../node_modules/prop-types/lib/ReactPropTypesSecret.js");
+  var ReactPropTypesSecret = __webpack_require__(/*! ./lib/ReactPropTypesSecret */ "./node_modules/prop-types/lib/ReactPropTypesSecret.js");
   var loggedTypeFailures = {};
 
   printWarning = function(text) {
@@ -2581,10 +3224,10 @@ module.exports = checkPropTypes;
 
 /***/ }),
 
-/***/ "../node_modules/prop-types/factoryWithTypeCheckers.js":
-/*!*************************************************************!*\
-  !*** ../node_modules/prop-types/factoryWithTypeCheckers.js ***!
-  \*************************************************************/
+/***/ "./node_modules/prop-types/factoryWithTypeCheckers.js":
+/*!************************************************************!*\
+  !*** ./node_modules/prop-types/factoryWithTypeCheckers.js ***!
+  \************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2598,10 +3241,10 @@ module.exports = checkPropTypes;
 
 
 
-var assign = __webpack_require__(/*! object-assign */ "../node_modules/object-assign/index.js");
+var assign = __webpack_require__(/*! object-assign */ "./node_modules/object-assign/index.js");
 
-var ReactPropTypesSecret = __webpack_require__(/*! ./lib/ReactPropTypesSecret */ "../node_modules/prop-types/lib/ReactPropTypesSecret.js");
-var checkPropTypes = __webpack_require__(/*! ./checkPropTypes */ "../node_modules/prop-types/checkPropTypes.js");
+var ReactPropTypesSecret = __webpack_require__(/*! ./lib/ReactPropTypesSecret */ "./node_modules/prop-types/lib/ReactPropTypesSecret.js");
+var checkPropTypes = __webpack_require__(/*! ./checkPropTypes */ "./node_modules/prop-types/checkPropTypes.js");
 
 var printWarning = function() {};
 
@@ -3148,10 +3791,10 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 /***/ }),
 
-/***/ "../node_modules/prop-types/index.js":
-/*!*******************************************!*\
-  !*** ../node_modules/prop-types/index.js ***!
-  \*******************************************/
+/***/ "./node_modules/prop-types/index.js":
+/*!******************************************!*\
+  !*** ./node_modules/prop-types/index.js ***!
+  \******************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3177,16 +3820,16 @@ if (true) {
   // By explicitly using `prop-types` you are opting into new development behavior.
   // http://fb.me/prop-types-in-prod
   var throwOnDirectAccess = true;
-  module.exports = __webpack_require__(/*! ./factoryWithTypeCheckers */ "../node_modules/prop-types/factoryWithTypeCheckers.js")(isValidElement, throwOnDirectAccess);
+  module.exports = __webpack_require__(/*! ./factoryWithTypeCheckers */ "./node_modules/prop-types/factoryWithTypeCheckers.js")(isValidElement, throwOnDirectAccess);
 } else {}
 
 
 /***/ }),
 
-/***/ "../node_modules/prop-types/lib/ReactPropTypesSecret.js":
-/*!**************************************************************!*\
-  !*** ../node_modules/prop-types/lib/ReactPropTypesSecret.js ***!
-  \**************************************************************/
+/***/ "./node_modules/prop-types/lib/ReactPropTypesSecret.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/prop-types/lib/ReactPropTypesSecret.js ***!
+  \*************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3207,10 +3850,10 @@ module.exports = ReactPropTypesSecret;
 
 /***/ }),
 
-/***/ "../node_modules/react-dom/cjs/react-dom.development.js":
-/*!**************************************************************!*\
-  !*** ../node_modules/react-dom/cjs/react-dom.development.js ***!
-  \**************************************************************/
+/***/ "./node_modules/react-dom/cjs/react-dom.development.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/react-dom/cjs/react-dom.development.js ***!
+  \*************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3232,19 +3875,19 @@ if (true) {
   (function() {
 'use strict';
 
-var invariant = __webpack_require__(/*! fbjs/lib/invariant */ "../node_modules/fbjs/lib/invariant.js");
-var React = __webpack_require__(/*! react */ "../node_modules/react/index.js");
-var warning = __webpack_require__(/*! fbjs/lib/warning */ "../node_modules/fbjs/lib/warning.js");
-var ExecutionEnvironment = __webpack_require__(/*! fbjs/lib/ExecutionEnvironment */ "../node_modules/fbjs/lib/ExecutionEnvironment.js");
-var _assign = __webpack_require__(/*! object-assign */ "../node_modules/object-assign/index.js");
-var emptyFunction = __webpack_require__(/*! fbjs/lib/emptyFunction */ "../node_modules/fbjs/lib/emptyFunction.js");
-var checkPropTypes = __webpack_require__(/*! prop-types/checkPropTypes */ "../node_modules/prop-types/checkPropTypes.js");
-var getActiveElement = __webpack_require__(/*! fbjs/lib/getActiveElement */ "../node_modules/fbjs/lib/getActiveElement.js");
-var shallowEqual = __webpack_require__(/*! fbjs/lib/shallowEqual */ "../node_modules/fbjs/lib/shallowEqual.js");
-var containsNode = __webpack_require__(/*! fbjs/lib/containsNode */ "../node_modules/fbjs/lib/containsNode.js");
-var emptyObject = __webpack_require__(/*! fbjs/lib/emptyObject */ "../node_modules/fbjs/lib/emptyObject.js");
-var hyphenateStyleName = __webpack_require__(/*! fbjs/lib/hyphenateStyleName */ "../node_modules/fbjs/lib/hyphenateStyleName.js");
-var camelizeStyleName = __webpack_require__(/*! fbjs/lib/camelizeStyleName */ "../node_modules/fbjs/lib/camelizeStyleName.js");
+var invariant = __webpack_require__(/*! fbjs/lib/invariant */ "./node_modules/fbjs/lib/invariant.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var warning = __webpack_require__(/*! fbjs/lib/warning */ "./node_modules/fbjs/lib/warning.js");
+var ExecutionEnvironment = __webpack_require__(/*! fbjs/lib/ExecutionEnvironment */ "./node_modules/fbjs/lib/ExecutionEnvironment.js");
+var _assign = __webpack_require__(/*! object-assign */ "./node_modules/object-assign/index.js");
+var emptyFunction = __webpack_require__(/*! fbjs/lib/emptyFunction */ "./node_modules/fbjs/lib/emptyFunction.js");
+var checkPropTypes = __webpack_require__(/*! prop-types/checkPropTypes */ "./node_modules/prop-types/checkPropTypes.js");
+var getActiveElement = __webpack_require__(/*! fbjs/lib/getActiveElement */ "./node_modules/fbjs/lib/getActiveElement.js");
+var shallowEqual = __webpack_require__(/*! fbjs/lib/shallowEqual */ "./node_modules/fbjs/lib/shallowEqual.js");
+var containsNode = __webpack_require__(/*! fbjs/lib/containsNode */ "./node_modules/fbjs/lib/containsNode.js");
+var emptyObject = __webpack_require__(/*! fbjs/lib/emptyObject */ "./node_modules/fbjs/lib/emptyObject.js");
+var hyphenateStyleName = __webpack_require__(/*! fbjs/lib/hyphenateStyleName */ "./node_modules/fbjs/lib/hyphenateStyleName.js");
+var camelizeStyleName = __webpack_require__(/*! fbjs/lib/camelizeStyleName */ "./node_modules/fbjs/lib/camelizeStyleName.js");
 
 // Relying on the `invariant()` implementation lets us
 // have preserve the format and params in the www builds.
@@ -20649,10 +21292,10 @@ module.exports = reactDom;
 
 /***/ }),
 
-/***/ "../node_modules/react-dom/index.js":
-/*!******************************************!*\
-  !*** ../node_modules/react-dom/index.js ***!
-  \******************************************/
+/***/ "./node_modules/react-dom/index.js":
+/*!*****************************************!*\
+  !*** ./node_modules/react-dom/index.js ***!
+  \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20688,16 +21331,16 @@ function checkDCE() {
 }
 
 if (false) {} else {
-  module.exports = __webpack_require__(/*! ./cjs/react-dom.development.js */ "../node_modules/react-dom/cjs/react-dom.development.js");
+  module.exports = __webpack_require__(/*! ./cjs/react-dom.development.js */ "./node_modules/react-dom/cjs/react-dom.development.js");
 }
 
 
 /***/ }),
 
-/***/ "../node_modules/react/cjs/react.development.js":
-/*!******************************************************!*\
-  !*** ../node_modules/react/cjs/react.development.js ***!
-  \******************************************************/
+/***/ "./node_modules/react/cjs/react.development.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/react/cjs/react.development.js ***!
+  \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20719,12 +21362,12 @@ if (true) {
   (function() {
 'use strict';
 
-var _assign = __webpack_require__(/*! object-assign */ "../node_modules/object-assign/index.js");
-var invariant = __webpack_require__(/*! fbjs/lib/invariant */ "../node_modules/fbjs/lib/invariant.js");
-var emptyObject = __webpack_require__(/*! fbjs/lib/emptyObject */ "../node_modules/fbjs/lib/emptyObject.js");
-var warning = __webpack_require__(/*! fbjs/lib/warning */ "../node_modules/fbjs/lib/warning.js");
-var emptyFunction = __webpack_require__(/*! fbjs/lib/emptyFunction */ "../node_modules/fbjs/lib/emptyFunction.js");
-var checkPropTypes = __webpack_require__(/*! prop-types/checkPropTypes */ "../node_modules/prop-types/checkPropTypes.js");
+var _assign = __webpack_require__(/*! object-assign */ "./node_modules/object-assign/index.js");
+var invariant = __webpack_require__(/*! fbjs/lib/invariant */ "./node_modules/fbjs/lib/invariant.js");
+var emptyObject = __webpack_require__(/*! fbjs/lib/emptyObject */ "./node_modules/fbjs/lib/emptyObject.js");
+var warning = __webpack_require__(/*! fbjs/lib/warning */ "./node_modules/fbjs/lib/warning.js");
+var emptyFunction = __webpack_require__(/*! fbjs/lib/emptyFunction */ "./node_modules/fbjs/lib/emptyFunction.js");
+var checkPropTypes = __webpack_require__(/*! prop-types/checkPropTypes */ "./node_modules/prop-types/checkPropTypes.js");
 
 // TODO: this is special because it gets imported during build.
 
@@ -22192,10 +22835,10 @@ module.exports = react;
 
 /***/ }),
 
-/***/ "../node_modules/react/index.js":
-/*!**************************************!*\
-  !*** ../node_modules/react/index.js ***!
-  \**************************************/
+/***/ "./node_modules/react/index.js":
+/*!*************************************!*\
+  !*** ./node_modules/react/index.js ***!
+  \*************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22203,16 +22846,16 @@ module.exports = react;
 
 
 if (false) {} else {
-  module.exports = __webpack_require__(/*! ./cjs/react.development.js */ "../node_modules/react/cjs/react.development.js");
+  module.exports = __webpack_require__(/*! ./cjs/react.development.js */ "./node_modules/react/cjs/react.development.js");
 }
 
 
 /***/ }),
 
-/***/ "../node_modules/style-loader/lib/addStyles.js":
-/*!*****************************************************!*\
-  !*** ../node_modules/style-loader/lib/addStyles.js ***!
-  \*****************************************************/
+/***/ "./node_modules/style-loader/lib/addStyles.js":
+/*!****************************************************!*\
+  !*** ./node_modules/style-loader/lib/addStyles.js ***!
+  \****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22279,7 +22922,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(/*! ./urls */ "../node_modules/style-loader/lib/urls.js");
+var	fixUrls = __webpack_require__(/*! ./urls */ "./node_modules/style-loader/lib/urls.js");
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -22600,10 +23243,10 @@ function updateLink (link, options, obj) {
 
 /***/ }),
 
-/***/ "../node_modules/style-loader/lib/urls.js":
-/*!************************************************!*\
-  !*** ../node_modules/style-loader/lib/urls.js ***!
-  \************************************************/
+/***/ "./node_modules/style-loader/lib/urls.js":
+/*!***********************************************!*\
+  !*** ./node_modules/style-loader/lib/urls.js ***!
+  \***********************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -22697,646 +23340,6 @@ module.exports = function (css) {
 	return fixedCss;
 };
 
-
-/***/ }),
-
-/***/ "./config/IMDB.js":
-/*!************************!*\
-  !*** ./config/IMDB.js ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-window.IMDB_API_KEY = "466ef7f2eba37ea246c81e2580f48e95";
-
-/***/ }),
-
-/***/ "./main.js":
-/*!*****************!*\
-  !*** ./main.js ***!
-  \*****************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(/*! ./src/styles/styles.css */ "./src/styles/styles.css");
-
-var _react = __webpack_require__(/*! react */ "../node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(/*! react-dom */ "../node_modules/react-dom/index.js");
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _App = __webpack_require__(/*! ./src/components/App.jsx */ "./src/components/App.jsx");
-
-var _App2 = _interopRequireDefault(_App);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.getElementById("app"));
-
-/***/ }),
-
-/***/ "./src/components/App.jsx":
-/*!********************************!*\
-  !*** ./src/components/App.jsx ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _React = __webpack_require__(/*! React */ "../node_modules/React/index.js");
-
-var _React2 = _interopRequireDefault(_React);
-
-var _MovieList = __webpack_require__(/*! ./MovieList.jsx */ "./src/components/MovieList.jsx");
-
-var _Search = __webpack_require__(/*! ./Search.jsx */ "./src/components/Search.jsx");
-
-var _Filter = __webpack_require__(/*! ./Filter.jsx */ "./src/components/Filter.jsx");
-
-var _FindAndAdd = __webpack_require__(/*! ./FindAndAdd.jsx */ "./src/components/FindAndAdd.jsx");
-
-var _IMDBSearch = __webpack_require__(/*! ../lib/IMDBSearch.js */ "./src/lib/IMDBSearch.js");
-
-var _IMDBSearch2 = _interopRequireDefault(_IMDBSearch);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var App = function (_React$Component) {
-  _inherits(App, _React$Component);
-
-  function App(props) {
-    _classCallCheck(this, App);
-
-    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
-
-    _this.state = {
-      movieList: props.movieList,
-      movieListSearchQuery: "",
-      filterValue: _this.props.filterValues["all"],
-      databaseResults: []
-    };
-    return _this;
-  }
-
-  _createClass(App, [{
-    key: "handleMovieListSearch",
-    value: function handleMovieListSearch(event) {
-      this.setState({ movieListSearchQuery: event.target.value.toLowerCase() });
-    }
-  }, {
-    key: "setFilterValue",
-    value: function setFilterValue(filterValue) {
-      this.setState({ filterValue: filterValue });
-    }
-  }, {
-    key: "toggleWatched",
-    value: function toggleWatched(movie) {
-      movie.watched = !movie.watched;
-      this.refreshMovieList();
-    }
-  }, {
-    key: "handleDatabaseSearch",
-    value: function handleDatabaseSearch(event) {
-      var _this2 = this;
-
-      this.inputField = event.target;
-      _IMDBSearch2.default.search(event.target.value, function (databaseResults) {
-        _this2.setState({ databaseResults: databaseResults });
-      });
-    }
-  }, {
-    key: "addMovie",
-    value: function addMovie(movie) {
-      if (movie && !this.hasTitle(movie.title)) {
-        movie.watched = false;
-        this.state.movieList.push(movie);
-        this.refreshMovieList();
-      }
-    }
-  }, {
-    key: "refreshMovieList",
-    value: function refreshMovieList() {
-      this.setState({ movieList: this.state.movieList, databaseResults: [] });
-      if (this.inputField) {
-        this.inputField.value = "";
-        this.inputField.focus();
-      }
-    }
-  }, {
-    key: "hasTitle",
-    value: function hasTitle(title) {
-      return this.state.movieList.reduce(function (containsMovie, currentMovie) {
-        return containsMovie || currentMovie.title.toLowerCase() === title.toLowerCase();
-      }, false);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this3 = this;
-
-      return _React2.default.createElement(
-        "div",
-        null,
-        _React2.default.createElement(
-          "div",
-          { className: "heading" },
-          " My Movies "
-        ),
-        _React2.default.createElement(
-          "div",
-          { className: "inputs" },
-          _React2.default.createElement(_FindAndAdd.FindAndAdd, {
-            search: this.handleDatabaseSearch.bind(this),
-            results: this.state.databaseResults.slice(0, 5),
-            select: this.addMovie.bind(this)
-          }),
-          _React2.default.createElement(_Search.Search, { search: this.handleMovieListSearch.bind(this) })
-        ),
-        _React2.default.createElement(_Filter.Filter, {
-          value: this.state.filterValue,
-          values: this.props.filterValues,
-          setValue: this.setFilterValue.bind(this)
-        }),
-        _React2.default.createElement(_MovieList.MovieList, {
-          movies: this.state.movieList.filter(function (movie) {
-            return movie.title.toLowerCase().match(_this3.state.movieListSearchQuery) && (_this3.state.filterValue === _this3.props.filterValues["all"] || movie.watched && _this3.state.filterValue === _this3.props.filterValues["seen"] || !movie.watched && _this3.state.filterValue === _this3.props.filterValues["unseen"]);
-          }),
-          toggle: this.toggleWatched.bind(this)
-        })
-      );
-    }
-  }]);
-
-  return App;
-}(_React2.default.Component);
-
-exports.default = App;
-
-
-App.defaultProps = {
-  filterValues: { all: 2, seen: 1, unseen: 0 },
-  movieList: [
-    // { title: "Mean Girls", watched: false },
-    // { title: "Hackers", watched: false },
-    // { title: "The Grey", watched: false },
-    // { title: "Sunshine", watched: false },
-    // { title: "Ex Machina", watched: false }
-  ]
-};
-
-/***/ }),
-
-/***/ "./src/components/Filter.jsx":
-/*!***********************************!*\
-  !*** ./src/components/Filter.jsx ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Filter = Filter;
-
-var _React = __webpack_require__(/*! React */ "../node_modules/React/index.js");
-
-var _React2 = _interopRequireDefault(_React);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function Filter(props) {
-  return _React2.default.createElement(
-    "div",
-    { className: "filter" },
-    _React2.default.createElement(
-      "span",
-      {
-        id: "all",
-        onClick: function onClick() {
-          return props.setValue(props.values["all"]);
-        },
-        className: props.value === props.values["all"] ? "selected" : ""
-      },
-      "All"
-    ),
-    _React2.default.createElement(
-      "span",
-      {
-        id: "seen",
-        onClick: function onClick() {
-          return props.setValue(props.values["seen"]);
-        },
-        className: props.value === props.values["seen"] ? "selected" : ""
-      },
-      "Seen"
-    ),
-    _React2.default.createElement(
-      "span",
-      {
-        id: "unseen",
-        onClick: function onClick() {
-          return props.setValue(props.values["unseen"]);
-        },
-        className: props.value === props.values["unseen"] ? "selected" : ""
-      },
-      "Unseen"
-    )
-  );
-}
-
-/***/ }),
-
-/***/ "./src/components/FindAndAdd.jsx":
-/*!***************************************!*\
-  !*** ./src/components/FindAndAdd.jsx ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.FindAndAdd = FindAndAdd;
-
-var _React = __webpack_require__(/*! React */ "../node_modules/React/index.js");
-
-var _React2 = _interopRequireDefault(_React);
-
-var _propTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function FindAndAdd(props) {
-  return _React2.default.createElement(
-    "div",
-    { className: "find-and-add" },
-    _React2.default.createElement("input", {
-      type: "text",
-      id: "database-search-input",
-      onKeyUp: props.search,
-      placeholder: "Find and add...",
-      autoFocus: true
-    }),
-    _React2.default.createElement(
-      "div",
-      { id: "database-search-dropdown-list" },
-      props.results.map(function (result, index) {
-        return _React2.default.createElement(
-          "div",
-          {
-            key: index,
-            tabIndex: index,
-            className: "dropdown-entry",
-            onClick: function onClick() {
-              return props.select(result);
-            }
-          },
-          result.title
-        );
-      })
-    )
-  );
-}
-
-FindAndAdd.propTypes = {
-  search: _propTypes2.default.func.isRequired,
-  results: _propTypes2.default.array.isRequired
-};
-
-/***/ }),
-
-/***/ "./src/components/MovieList.jsx":
-/*!**************************************!*\
-  !*** ./src/components/MovieList.jsx ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.MovieList = MovieList;
-
-var _React = __webpack_require__(/*! React */ "../node_modules/React/index.js");
-
-var _React2 = _interopRequireDefault(_React);
-
-var _propTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _MovieListEntry = __webpack_require__(/*! ./MovieListEntry.jsx */ "./src/components/MovieListEntry.jsx");
-
-var _MovieListEntry2 = _interopRequireDefault(_MovieListEntry);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function MovieList(props) {
-  var list = list = props.movies.map(function (movie, index) {
-    return _React2.default.createElement(_MovieListEntry2.default, {
-      key: index,
-      index: index,
-      movie: movie,
-      toggle: props.toggle
-    });
-  });
-
-  list = list.length ? list : _React2.default.createElement(
-    "div",
-    null,
-    "No movies found. Add some!"
-  );
-
-  return _React2.default.createElement(
-    "div",
-    { className: "movie-list" },
-    list
-  );
-}
-
-MovieList.propTypes = {
-  movies: _propTypes2.default.array.isRequired
-};
-
-/***/ }),
-
-/***/ "./src/components/MovieListEntry.jsx":
-/*!*******************************************!*\
-  !*** ./src/components/MovieListEntry.jsx ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _React = __webpack_require__(/*! React */ "../node_modules/React/index.js");
-
-var _React2 = _interopRequireDefault(_React);
-
-var _propTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var MovieListEntry = function (_React$Component) {
-  _inherits(MovieListEntry, _React$Component);
-
-  function MovieListEntry(props) {
-    _classCallCheck(this, MovieListEntry);
-
-    var _this = _possibleConstructorReturn(this, (MovieListEntry.__proto__ || Object.getPrototypeOf(MovieListEntry)).call(this, props));
-
-    _this.state = { showDetails: false };
-    return _this;
-  }
-
-  _createClass(MovieListEntry, [{
-    key: "toggleDetails",
-    value: function toggleDetails() {
-      this.setState({ showDetails: !this.state.showDetails });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      var details = _React2.default.createElement("div", null);
-      if (this.state.showDetails) {
-        details = _React2.default.createElement(
-          "div",
-          { className: "movie-list-entry-details" },
-          _React2.default.createElement(
-            "span",
-            { className: "movie-list-entry-metadata" },
-            _React2.default.createElement(
-              "div",
-              null,
-              _React2.default.createElement(
-                "span",
-                { className: "bold" },
-                "Release year: "
-              ),
-              this.props.movie["release_date"].split("-")[0]
-            ),
-            _React2.default.createElement(
-              "div",
-              null,
-              _React2.default.createElement(
-                "span",
-                { className: "bold" },
-                "Rating: "
-              ),
-              this.props.movie["vote_average"]
-            ),
-            _React2.default.createElement(
-              "span",
-              { className: "bold" },
-              "Seen it? "
-            ),
-            _React2.default.createElement("input", {
-              type: "checkbox",
-              checked: this.props.movie.watched ? "checked" : "",
-              onChange: function onChange() {
-                return _this2.props.toggle(_this2.props.movie);
-              }
-            })
-          ),
-          _React2.default.createElement("img", {
-            className: "movie-list-entry-thumbnail",
-            src: "" + this.props.imageUrl + (this.props.movie["poster_path"] || "default")
-          })
-        );
-      }
-
-      return _React2.default.createElement(
-        "div",
-        { className: "movie-list-entry" },
-        _React2.default.createElement(
-          "div",
-          {
-            className: "movie-list-entry-title",
-            onClick: this.toggleDetails.bind(this)
-          },
-          this.props.movie["title"],
-          _React2.default.createElement(
-            "span",
-            { className: "tooltip" },
-            this.state.showDetails ? "Hide" : "Show",
-            " details"
-          )
-        ),
-        details
-      );
-    }
-  }]);
-
-  return MovieListEntry;
-}(_React2.default.Component);
-
-exports.default = MovieListEntry;
-
-
-MovieListEntry.propTypes = {
-  movie: _propTypes2.default.object.isRequired
-};
-
-MovieListEntry.defaultProps = {
-  imageUrl: "https://image.tmdb.org/t/p/w500/"
-};
-
-/***/ }),
-
-/***/ "./src/components/Search.jsx":
-/*!***********************************!*\
-  !*** ./src/components/Search.jsx ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Search = Search;
-
-var _React = __webpack_require__(/*! React */ "../node_modules/React/index.js");
-
-var _React2 = _interopRequireDefault(_React);
-
-var _propTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function Search(props) {
-  return _React2.default.createElement(
-    "div",
-    { className: "search-collection" },
-    _React2.default.createElement("input", {
-      type: "text",
-      onKeyUp: props.search,
-      placeholder: "Search collection..."
-    })
-  );
-}
-
-Search.propTypes = {
-  search: _propTypes2.default.func.isRequired
-};
-
-/***/ }),
-
-/***/ "./src/lib/IMDBSearch.js":
-/*!*******************************!*\
-  !*** ./src/lib/IMDBSearch.js ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-__webpack_require__(/*! ../../config/IMDB.js */ "./config/IMDB.js");
-
-exports.default = {
-  endpoint: "https://api.themoviedb.org/3/search/movie?api_key=" + window.IMDB_API_KEY,
-  search: function search(title, callback) {
-    if (title) {
-      window.fetch(this.endpoint + "&query=" + title).then(function (response) {
-        if (response.ok) {
-          return response.json();
-        }
-      }).then(function (json) {
-        callback(json ? json.results : []);
-      });
-    }
-  }
-};
-
-/***/ }),
-
-/***/ "./src/styles/styles.css":
-/*!*******************************!*\
-  !*** ./src/styles/styles.css ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../../node_modules/css-loader!./styles.css */ "../node_modules/css-loader/index.js!./src/styles/styles.css");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "../node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
 
 /***/ })
 
