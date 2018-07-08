@@ -1,4 +1,4 @@
-import "../config/IMDB.js";
+import "../../config/IMDB.js";
 
 export default {
   endpoint: `https://api.themoviedb.org/3/search/movie?api_key=${

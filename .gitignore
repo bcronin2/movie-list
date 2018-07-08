@@ -8,4 +8,4 @@ dist/bundle.js
 package-lock.json
 
 ## API keys ##
-src/config/
+client/src/config/
