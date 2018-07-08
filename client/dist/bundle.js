@@ -158,9 +158,9 @@ var _Filter = __webpack_require__(/*! ./Filter.jsx */ "./client/src/components/F
 
 var _FindAndAdd = __webpack_require__(/*! ./FindAndAdd.jsx */ "./client/src/components/FindAndAdd.jsx");
 
-var _IMDBSearch = __webpack_require__(/*! ../lib/IMDBSearch.js */ "./client/src/lib/IMDBSearch.js");
+var _IMDB = __webpack_require__(/*! ../lib/IMDB.js */ "./client/src/lib/IMDB.js");
 
-var _IMDBSearch2 = _interopRequireDefault(_IMDBSearch);
+var _IMDB2 = _interopRequireDefault(_IMDB);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -209,7 +209,7 @@ var App = function (_React$Component) {
       var _this2 = this;
 
       this.inputField = event.target;
-      _IMDBSearch2.default.search(event.target.value, function (databaseResults) {
+      _IMDB2.default.search(event.target.value, function (databaseResults) {
         _this2.setState({ databaseResults: databaseResults });
       });
     }
@@ -663,10 +663,10 @@ Search.propTypes = {
 
 /***/ }),
 
-/***/ "./client/src/lib/IMDBSearch.js":
-/*!**************************************!*\
-  !*** ./client/src/lib/IMDBSearch.js ***!
-  \**************************************/
+/***/ "./client/src/lib/IMDB.js":
+/*!********************************!*\
+  !*** ./client/src/lib/IMDB.js ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 

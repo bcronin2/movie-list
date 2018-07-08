@@ -3,7 +3,7 @@ import { MovieList } from "./MovieList.jsx";
 import { Search } from "./Search.jsx";
 import { Filter } from "./Filter.jsx";
 import { FindAndAdd } from "./FindAndAdd.jsx";
-import IMDB from "../lib/IMDBSearch.js";
+import IMDB from "../lib/IMDB.js";
 
 export default class App extends React.Component {
   constructor(props) {
