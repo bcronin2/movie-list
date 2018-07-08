@@ -1,3 +1,4 @@
+import httpRequest from "./httpRequest.js";
 import "../../config/IMDB.js";
 
 export default {
@@ -6,18 +7,8 @@ export default {
   }`,
   search: function(title, callback) {
     if (title) {
-      window
-        .fetch(`${this.endpoint}&query=${title}`)
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          }
-        })
-        .then(json => {
-          callback(json ? json.results : []);
-        });
+      httpRequest.get(`${this.endpoint}&query=${title}`, callback);
     } else {
-      console.log("no results");
       callback([]);
     }
   }

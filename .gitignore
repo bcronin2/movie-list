@@ -2,7 +2,7 @@
 node_modules/
 
 ## dist ##
-dist/bundle.js
+client/dist/
 
 ## package-lock ##
 package-lock.json

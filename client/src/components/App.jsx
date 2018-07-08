@@ -46,10 +46,10 @@ export default class App extends React.Component {
 
   refreshMovieList() {
     this.setState({ movieList: this.state.movieList, databaseResults: [] });
-    if (this.inputField) {
-      this.inputField.value = "";
-      this.inputField.focus();
-    }
+    // if (this.inputField) {
+    //   this.inputField.value = "";
+    //   this.inputField.focus();
+    // }
   }
 
   hasTitle(title) {

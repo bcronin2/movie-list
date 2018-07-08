@@ -226,10 +226,10 @@ var App = function (_React$Component) {
     key: "refreshMovieList",
     value: function refreshMovieList() {
       this.setState({ movieList: this.state.movieList, databaseResults: [] });
-      if (this.inputField) {
-        this.inputField.value = "";
-        this.inputField.focus();
-      }
+      // if (this.inputField) {
+      //   this.inputField.value = "";
+      //   this.inputField.focus();
+      // }
     }
   }, {
     key: "hasTitle",
@@ -677,23 +677,59 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _httpRequest = __webpack_require__(/*! ./httpRequest.js */ "./client/src/lib/httpRequest.js");
+
+var _httpRequest2 = _interopRequireDefault(_httpRequest);
+
 __webpack_require__(/*! ../../config/IMDB.js */ "./client/config/IMDB.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
   endpoint: "https://api.themoviedb.org/3/search/movie?api_key=" + window.IMDB_API_KEY,
   search: function search(title, callback) {
     if (title) {
-      window.fetch(this.endpoint + "&query=" + title).then(function (response) {
-        if (response.ok) {
-          return response.json();
-        }
-      }).then(function (json) {
-        callback(json ? json.results : []);
-      });
+      _httpRequest2.default.get(this.endpoint + "&query=" + title, callback);
     } else {
-      console.log("no results");
       callback([]);
     }
+  }
+};
+
+/***/ }),
+
+/***/ "./client/src/lib/httpRequest.js":
+/*!***************************************!*\
+  !*** ./client/src/lib/httpRequest.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  get: function get(url, callback) {
+    window.fetch(url).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      return callback(json ? json.results : []);
+    });
+  },
+
+  post: function post(url, data, callback) {
+    window.fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(data)
+    }).then(function (response) {
+      return response.json();
+    }).then(callback());
   }
 };
 
