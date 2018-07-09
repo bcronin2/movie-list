@@ -32,7 +32,16 @@ export default class App extends React.Component {
   }
 
   toggleWatched(movie) {
-    movieCollection.put(movie, this.retrieveMovies.bind(this));
+    movieCollection.put(
+      { id: movie.id, watched: !movie.watched },
+      this.retrieveMovies.bind(this)
+    );
+  }
+
+  removeMovie(movie) {
+    if (movie) {
+      movieCollection.delete({ id: movie.id }, this.retrieveMovies.bind(this));
+    }
   }
 
   setFilterValue(filterValue) {
@@ -79,7 +88,8 @@ export default class App extends React.Component {
                 (!movie.watched &&
                   this.state.filterValue === this.props.filterValues["unseen"]))
           )}
-          toggle={this.toggleWatched.bind(this)}
+          update={this.toggleWatched.bind(this)}
+          delete={this.removeMovie.bind(this)}
         />
       </div>
     );

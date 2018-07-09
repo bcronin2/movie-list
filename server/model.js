@@ -11,10 +11,6 @@ var dbQuery = (queryString, callback) => {
 };
 
 module.exports = {
-  get: function(callback) {
-    var getAllMovies = "SELECT * FROM collection";
-    dbQuery(getAllMovies, callback);
-  },
   post: function(movie, callback) {
     var addMovie = `INSERT INTO collection
       (title, year, rating, poster, watched)
@@ -22,13 +18,19 @@ module.exports = {
       ${movie.rating}, "${movie.poster}", ${movie.watched})`;
     dbQuery(addMovie, callback);
   },
+  get: function(callback) {
+    var getAllMovies = "SELECT * FROM collection";
+    dbQuery(getAllMovies, callback);
+  },
   put: function(movie, callback) {
     var updateMovie = `UPDATE collection
       SET watched = ${movie.watched}
-      WHERE collection.title = "${movie.title}"
-      AND collection.year = ${movie.year}
-      AND collection.poster = "${movie.poster}"`;
-    console.log(updateMovie);
+      WHERE id = ${movie.id}`;
     dbQuery(updateMovie, callback);
+  },
+  delete: function(movie, callback) {
+    var deleteMovie = `DELETE from collection
+      WHERE id = ${movie.id}`;
+    dbQuery(deleteMovie, callback);
   }
 };

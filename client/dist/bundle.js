@@ -212,7 +212,14 @@ var App = function (_React$Component) {
   }, {
     key: "toggleWatched",
     value: function toggleWatched(movie) {
-      _movieCollection2.default.put(movie, this.retrieveMovies.bind(this));
+      _movieCollection2.default.put({ id: movie.id, watched: !movie.watched }, this.retrieveMovies.bind(this));
+    }
+  }, {
+    key: "removeMovie",
+    value: function removeMovie(movie) {
+      if (movie) {
+        _movieCollection2.default.delete({ id: movie.id }, this.retrieveMovies.bind(this));
+      }
     }
   }, {
     key: "setFilterValue",
@@ -266,7 +273,8 @@ var App = function (_React$Component) {
           movies: this.state.movieList.filter(function (movie) {
             return movie.title.toLowerCase().match(_this4.state.movieListSearchQuery) && (_this4.state.filterValue === _this4.props.filterValues["all"] || movie.watched && _this4.state.filterValue === _this4.props.filterValues["seen"] || !movie.watched && _this4.state.filterValue === _this4.props.filterValues["unseen"]);
           }),
-          toggle: this.toggleWatched.bind(this)
+          update: this.toggleWatched.bind(this),
+          "delete": this.removeMovie.bind(this)
         })
       );
     }
@@ -453,7 +461,8 @@ function MovieList(props) {
       key: index,
       index: index,
       movie: movie,
-      toggle: props.toggle
+      update: props.update,
+      "delete": props.delete
     });
   });
 
@@ -567,7 +576,7 @@ var MovieListEntry = function (_React$Component) {
               type: "checkbox",
               checked: this.props.movie.watched ? "checked" : "",
               onChange: function onChange() {
-                return _this2.props.toggle(_this2.props.movie);
+                return _this2.props.update(_this2.props.movie);
               }
             })
           ),
@@ -583,16 +592,35 @@ var MovieListEntry = function (_React$Component) {
         { className: "movie-list-entry" },
         _React2.default.createElement(
           "div",
-          {
-            className: "movie-list-entry-title",
-            onClick: this.toggleDetails.bind(this)
-          },
-          this.props.movie["title"],
+          { className: "movie-list-entry-heading" },
           _React2.default.createElement(
             "span",
-            { className: "tooltip" },
-            this.state.showDetails ? "Hide" : "Show",
-            " details"
+            {
+              className: "movie-list-entry-title",
+              onClick: this.toggleDetails.bind(this)
+            },
+            this.props.movie["title"],
+            _React2.default.createElement(
+              "span",
+              { className: "tooltip" },
+              this.state.showDetails ? "Hide" : "Show",
+              " details"
+            )
+          ),
+          _React2.default.createElement(
+            "span",
+            {
+              className: "movie-list-entry-remove",
+              onClick: function onClick() {
+                return _this2.props.delete(_this2.props.movie);
+              }
+            },
+            "\xD7",
+            _React2.default.createElement(
+              "span",
+              { className: "tooltip" },
+              "Delete movie"
+            )
           )
         ),
         details
@@ -708,13 +736,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = {
-  get: function get(url, callback) {
-    window.fetch(url).then(function (response) {
-      return response.json();
-    }).then(function (json) {
-      return callback(json ? json.results : []);
-    });
-  },
   post: function post(url, data, callback) {
     window.fetch(url, {
       method: "POST",
@@ -726,9 +747,27 @@ exports.default = {
       return response;
     }).then(callback());
   },
+  get: function get(url, callback) {
+    window.fetch(url).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      return callback(json ? json.results : []);
+    });
+  },
   put: function put(url, data, callback) {
     window.fetch(url, {
       method: "PUT",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(data)
+    }).then(function (response) {
+      return response;
+    }).then(callback());
+  },
+  delete: function _delete(url, data, callback) {
+    window.fetch(url, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json; charset=utf-8"
       },
@@ -763,9 +802,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
   endpoint: "/movies",
-  get: function get(callback) {
-    _httpRequest2.default.get(this.endpoint, callback);
-  },
   post: function post(movie, callback) {
     var movieObj = {
       title: movie.title,
@@ -776,9 +812,14 @@ exports.default = {
     };
     _httpRequest2.default.post(this.endpoint, movieObj, callback);
   },
+  get: function get(callback) {
+    _httpRequest2.default.get(this.endpoint, callback);
+  },
   put: function put(movie, callback) {
-    movie.watched = !movie.watched;
     _httpRequest2.default.put(this.endpoint, movie, callback);
+  },
+  delete: function _delete(movie, callback) {
+    _httpRequest2.default.delete(this.endpoint, movie, callback);
   }
 };
 
@@ -2341,7 +2382,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ":root {\n  --shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n  --main-color: midnightblue;\n}\n\nhtml {\n  font-family: sans-serif;\n  height: 100vh;\n}\n\nbody {\n  background: #f1f1f1 !important;\n  height: 100%;\n}\n\n.container {\n  display: grid;\n  grid-template-columns: auto auto auto;\n  grid-template-rows: 10% auto auto;\n  height: 100%;\n  padding: 0.5rem;\n  position: relative;\n  width: 100%;\n}\n\n#app {\n  background-color: white;\n  border-radius: 1rem;\n  box-shadow: var(--shadow);\n  grid-column: 2;\n  grid-row: 2;\n  height: fit-content;\n}\n\n#app > * {\n  display: grid;\n  grid-row-gap: 0.8rem;\n  grid-template-columns: [start] 10% [center] 80% 10% [end];\n  grid-template-rows: [heading] auto [inputs] auto [filter] auto [movie-list] auto auto;\n}\n\n.heading {\n  background-color: lightgrey;\n  border-radius: 1rem 1rem 0 0;\n  font-size: 1.5rem;\n  font-family: Cambria;\n  margin-bottom: 1rem;\n  padding: 0.8rem;\n  grid-column-start: start;\n  grid-column-end: end;\n  grid-row: heading;\n}\n\n.inputs {\n  display: grid;\n  grid-column: center;\n  grid-row: inputs;\n  grid-template-columns: [find-and-add] 50% [search-collection] 50%;\n  margin-bottom: 1rem;\n}\n\n.find-and-add {\n  grid-column: find-and-add;\n}\n\n.search-collection {\n  grid-column: search-collection;\n}\n\n.filter {\n  grid-column: center;\n  grid-row: filter;\n}\n\n.movie-list {\n  border: 2px lightgrey solid;\n  grid-column: center;\n  grid-row: movie-list;\n  margin-bottom: 1rem;\n  padding: 0.5rem;\n  text-align: center;\n}\n\n.movie-list-entry {\n  background-color: lightgrey;\n  margin: 0.2rem;\n  padding: 0.2rem;\n  text-align: left;\n}\n\n.movie-list-entry-title {\n  cursor: pointer;\n  margin-bottom: 0.5rem;\n  width: fit-content;\n}\n\n.movie-list-entry-title .tooltip {\n  cursor: pointer;\n  visibility: hidden;\n  width: fit-content;\n  background-color: var(--main-color);\n  color: #fff;\n  opacity: 0.8;\n  font-size: 0.6rem;\n  text-align: center;\n  margin-left: 0.5rem;\n  padding: 0.2rem;\n  position: absolute;\n  transform: translate(-20px, -10px);\n  z-index: 1;\n}\n\n.movie-list-entry-title:hover .tooltip {\n  visibility: visible;\n}\n\n.movie-list-entry-details {\n  display: grid;\n  font-size: 0.9em;\n  grid-template-columns: [metadata] auto [thumbnail] auto;\n}\n\n.movie-list-entry-metadata {\n  grid-column: metadata;\n}\n\n.movie-list-entry-thumbnail {\n  align-self: end;\n  justify-self: end;\n  max-height: 3rem;\n  width: auto;\n}\n\n.filter > span {\n  border-radius: 0.2rem;\n  padding: 0.5rem;\n}\n\n.filter > span:hover {\n  cursor: pointer;\n}\n\ninput {\n  font-size: 1rem;\n}\n\n#database-search-dropdown-list {\n  background-color: white;\n  border: 1px solid lightgrey;\n  box-shadow: var(--shadow);\n  position: absolute;\n  z-index: 100;\n}\n\n.dropdown-entry {\n  color: var(--main-color);\n  font-size: 0.8rem;\n  padding: 0.4rem;\n}\n\n.dropdown-entry:hover {\n  background-color: var(--main-color);\n  color: white;\n  cursor: pointer;\n}\n\n.selected {\n  background-color: var(--main-color);\n  color: white;\n  font-weight: 800;\n}\n", ""]);
+exports.push([module.i, ":root {\n  --shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n  --main-color: midnightblue;\n}\n\nhtml {\n  font-family: sans-serif;\n  height: 100vh;\n}\n\nbody {\n  background: #f1f1f1 !important;\n  height: 100%;\n}\n\n.container {\n  display: grid;\n  grid-template-columns: auto auto auto;\n  grid-template-rows: 10% auto auto;\n  height: 100%;\n  padding: 0.5rem;\n  position: relative;\n  width: 100%;\n}\n\n#app {\n  background-color: white;\n  border-radius: 1rem;\n  box-shadow: var(--shadow);\n  grid-column: 2;\n  grid-row: 2;\n  height: fit-content;\n}\n\n#app > * {\n  display: grid;\n  grid-row-gap: 0.8rem;\n  grid-template-columns: [start] 10% [center] 80% 10% [end];\n  grid-template-rows: [heading] auto [inputs] auto [filter] auto [movie-list] auto auto;\n}\n\n.heading {\n  background-color: lightgrey;\n  border-radius: 1rem 1rem 0 0;\n  font-size: 1.5rem;\n  font-family: Cambria;\n  margin-bottom: 1rem;\n  padding: 0.8rem;\n  grid-column-start: start;\n  grid-column-end: end;\n  grid-row: heading;\n}\n\n.inputs {\n  display: grid;\n  grid-column: center;\n  grid-row: inputs;\n  grid-template-columns: [find-and-add] 50% [search-collection] 50%;\n  margin-bottom: 1rem;\n}\n\n.find-and-add {\n  grid-column: find-and-add;\n}\n\n.search-collection {\n  grid-column: search-collection;\n}\n\n.filter {\n  grid-column: center;\n  grid-row: filter;\n}\n\n.movie-list {\n  border: 2px lightgrey solid;\n  grid-column: center;\n  grid-row: movie-list;\n  margin-bottom: 1rem;\n  padding: 0.5rem;\n  text-align: center;\n}\n\n.movie-list-entry {\n  background-color: lightgrey;\n  margin: 0.2rem;\n  padding: 0.2rem;\n  text-align: left;\n}\n\n.movie-list-entry-heading {\n  display: grid;\n  grid-template-rows: 0;\n}\n\n.movie-list-entry-title {\n  cursor: pointer;\n  margin-bottom: 0.5rem;\n  width: fit-content;\n}\n\n.movie-list-entry-heading .tooltip {\n  background-color: var(--main-color);\n  color: #fff;\n  cursor: pointer;\n  font-size: 0.6rem;\n  margin-left: 0.5rem;\n  opacity: 0.8;\n  padding: 0.2rem;\n  position: absolute;\n  text-align: center;\n  transform: translate(-20px, -10px);\n  visibility: hidden;\n  width: fit-content;\n  z-index: 1;\n}\n\n.movie-list-entry-title:hover .tooltip {\n  visibility: visible;\n}\n\n.movie-list-entry-remove {\n  align-self: start;\n  cursor: pointer;\n  justify-self: end;\n}\n\n.movie-list-entry-remove:hover .tooltip {\n  visibility: visible;\n}\n\n.movie-list-entry-details {\n  display: grid;\n  font-size: 0.9em;\n  grid-template-columns: [metadata] auto [thumbnail] auto;\n}\n\n.movie-list-entry-metadata {\n  grid-column: metadata;\n}\n\n.movie-list-entry-thumbnail {\n  align-self: end;\n  justify-self: end;\n  max-height: 3rem;\n  width: auto;\n}\n\n.filter > span {\n  border-radius: 0.2rem;\n  padding: 0.5rem;\n}\n\n.filter > span:hover {\n  cursor: pointer;\n}\n\ninput {\n  font-size: 1rem;\n}\n\n#database-search-dropdown-list {\n  background-color: white;\n  border: 1px solid lightgrey;\n  box-shadow: var(--shadow);\n  position: absolute;\n  z-index: 100;\n}\n\n.dropdown-entry {\n  color: var(--main-color);\n  font-size: 0.8rem;\n  padding: 0.4rem;\n}\n\n.dropdown-entry:hover {\n  background-color: var(--main-color);\n  color: white;\n  cursor: pointer;\n}\n\n.selected {\n  background-color: var(--main-color);\n  color: white;\n  font-weight: 800;\n}\n", ""]);
 
 // exports
 

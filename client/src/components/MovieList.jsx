@@ -8,7 +8,8 @@ export function MovieList(props) {
       key={index}
       index={index}
       movie={movie}
-      toggle={props.toggle}
+      update={props.update}
+      delete={props.delete}
     />
   )));
 

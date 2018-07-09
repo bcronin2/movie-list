@@ -29,7 +29,7 @@ export default class MovieListEntry extends React.Component {
             <input
               type="checkbox"
               checked={this.props.movie.watched ? "checked" : ""}
-              onChange={() => this.props.toggle(this.props.movie)}
+              onChange={() => this.props.update(this.props.movie)}
             />
           </span>
           <img
@@ -42,13 +42,22 @@ export default class MovieListEntry extends React.Component {
 
     return (
       <div className="movie-list-entry">
-        <div
-          className="movie-list-entry-title"
-          onClick={this.toggleDetails.bind(this)}
-        >
-          {this.props.movie["title"]}
-          <span className="tooltip">
-            {this.state.showDetails ? "Hide" : "Show"} details
+        <div className="movie-list-entry-heading">
+          <span
+            className="movie-list-entry-title"
+            onClick={this.toggleDetails.bind(this)}
+          >
+            {this.props.movie["title"]}
+            <span className="tooltip">
+              {this.state.showDetails ? "Hide" : "Show"} details
+            </span>
+          </span>
+          <span
+            className="movie-list-entry-remove"
+            onClick={() => this.props.delete(this.props.movie)}
+          >
+            &times;
+            <span className="tooltip">Delete movie</span>
           </span>
         </div>
         {details}

@@ -88,29 +88,44 @@ body {
   text-align: left;
 }
 
+.movie-list-entry-heading {
+  display: grid;
+  grid-template-rows: 0;
+}
+
 .movie-list-entry-title {
   cursor: pointer;
   margin-bottom: 0.5rem;
   width: fit-content;
 }
 
-.movie-list-entry-title .tooltip {
-  cursor: pointer;
-  visibility: hidden;
-  width: fit-content;
+.movie-list-entry-heading .tooltip {
   background-color: var(--main-color);
   color: #fff;
-  opacity: 0.8;
+  cursor: pointer;
   font-size: 0.6rem;
-  text-align: center;
   margin-left: 0.5rem;
+  opacity: 0.8;
   padding: 0.2rem;
   position: absolute;
+  text-align: center;
   transform: translate(-20px, -10px);
+  visibility: hidden;
+  width: fit-content;
   z-index: 1;
 }
 
 .movie-list-entry-title:hover .tooltip {
+  visibility: visible;
+}
+
+.movie-list-entry-remove {
+  align-self: start;
+  cursor: pointer;
+  justify-self: end;
+}
+
+.movie-list-entry-remove:hover .tooltip {
   visibility: visible;
 }
 

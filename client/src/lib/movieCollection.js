@@ -2,9 +2,6 @@ import httpRequest from "./httpRequest.js";
 
 export default {
   endpoint: "/movies",
-  get: function(callback) {
-    httpRequest.get(this.endpoint, callback);
-  },
   post: function(movie, callback) {
     var movieObj = {
       title: movie.title,
@@ -15,8 +12,13 @@ export default {
     };
     httpRequest.post(this.endpoint, movieObj, callback);
   },
+  get: function(callback) {
+    httpRequest.get(this.endpoint, callback);
+  },
   put: function(movie, callback) {
-    movie.watched = !movie.watched;
     httpRequest.put(this.endpoint, movie, callback);
+  },
+  delete: function(movie, callback) {
+    httpRequest.delete(this.endpoint, movie, callback);
   }
 };
