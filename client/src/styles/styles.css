@@ -146,6 +146,10 @@ body {
   width: auto;
 }
 
+.movie-list-entry-thumbnail:hover {
+  max-height: 8rem;
+}
+
 .filter > span {
   border-radius: 0.2rem;
   padding: 0.5rem;
