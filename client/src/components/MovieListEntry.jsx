@@ -7,6 +7,12 @@ export default class MovieListEntry extends React.Component {
     this.state = { showDetails: false };
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    if (nextProps.movie.title !== this.props.movie.title) {
+      this.setState({ showDetails: false });
+    }
+  }
+
   toggleDetails() {
     this.setState({ showDetails: !this.state.showDetails });
   }
