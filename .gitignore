@@ -5,7 +5,7 @@ node_modules/
 package-lock.json
 
 ## credentials ##
-client/src/config/
+client/config/
 server/config/
 
 .DS_Store
