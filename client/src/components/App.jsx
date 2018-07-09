@@ -18,6 +18,12 @@ export default class App extends React.Component {
     this.retrieveMovies();
   }
 
+  retrieveMovies() {
+    movieCollection.get(movies => {
+      this.setState.bind(this)({ movieList: movies });
+    });
+  }
+
   addMovie(movie) {
     if (movie) {
       movieCollection.post(movie, this.retrieveMovies.bind(this));
@@ -25,31 +31,16 @@ export default class App extends React.Component {
     }
   }
 
-  retrieveMovies() {
-    movieCollection.get(movies => {
-      this.setState.bind(this)({ movieList: movies });
-    });
-  }
-
-  // refreshMovieList(movies) {
-  //   this.setState({ movieList: movies, imdbResults: [] });
-  //   if (this.inputField) {
-  //     this.inputField.value = "";
-  //     this.inputField.focus();
-  //   }
-  // }
-
-  handleMovieListSearch(event) {
-    this.setState({ movieListSearchQuery: event.target.value.toLowerCase() });
+  toggleWatched(movie) {
+    movieCollection.put(movie, this.retrieveMovies.bind(this));
   }
 
   setFilterValue(filterValue) {
     this.setState({ filterValue: filterValue });
   }
 
-  toggleWatched(movie) {
-    movie.watched = !movie.watched;
-    this.refreshMovieList();
+  handleMovieListSearch(event) {
+    this.setState({ movieListSearchQuery: event.target.value.toLowerCase() });
   }
 
   handleIMDBSearch(event) {

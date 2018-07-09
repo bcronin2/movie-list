@@ -14,5 +14,9 @@ export default {
       watched: false
     };
     httpRequest.post(this.endpoint, movieObj, callback);
+  },
+  put: function(movie, callback) {
+    movie.watched = !movie.watched;
+    httpRequest.put(this.endpoint, movie, callback);
   }
 };

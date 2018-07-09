@@ -193,14 +193,6 @@ var App = function (_React$Component) {
   }
 
   _createClass(App, [{
-    key: "addMovie",
-    value: function addMovie(movie) {
-      if (movie) {
-        _movieCollection2.default.post(movie, this.retrieveMovies.bind(this));
-        this.setState({ imdbResults: [] });
-      }
-    }
-  }, {
     key: "retrieveMovies",
     value: function retrieveMovies() {
       var _this2 = this;
@@ -209,19 +201,18 @@ var App = function (_React$Component) {
         _this2.setState.bind(_this2)({ movieList: movies });
       });
     }
-
-    // refreshMovieList(movies) {
-    //   this.setState({ movieList: movies, imdbResults: [] });
-    //   if (this.inputField) {
-    //     this.inputField.value = "";
-    //     this.inputField.focus();
-    //   }
-    // }
-
   }, {
-    key: "handleMovieListSearch",
-    value: function handleMovieListSearch(event) {
-      this.setState({ movieListSearchQuery: event.target.value.toLowerCase() });
+    key: "addMovie",
+    value: function addMovie(movie) {
+      if (movie) {
+        _movieCollection2.default.post(movie, this.retrieveMovies.bind(this));
+        this.setState({ imdbResults: [] });
+      }
+    }
+  }, {
+    key: "toggleWatched",
+    value: function toggleWatched(movie) {
+      _movieCollection2.default.put(movie, this.retrieveMovies.bind(this));
     }
   }, {
     key: "setFilterValue",
@@ -229,10 +220,9 @@ var App = function (_React$Component) {
       this.setState({ filterValue: filterValue });
     }
   }, {
-    key: "toggleWatched",
-    value: function toggleWatched(movie) {
-      movie.watched = !movie.watched;
-      this.refreshMovieList();
+    key: "handleMovieListSearch",
+    value: function handleMovieListSearch(event) {
+      this.setState({ movieListSearchQuery: event.target.value.toLowerCase() });
     }
   }, {
     key: "handleIMDBSearch",
@@ -725,10 +715,20 @@ exports.default = {
       return callback(json ? json.results : []);
     });
   },
-
   post: function post(url, data, callback) {
     window.fetch(url, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(data)
+    }).then(function (response) {
+      return response;
+    }).then(callback());
+  },
+  put: function put(url, data, callback) {
+    window.fetch(url, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json; charset=utf-8"
       },
@@ -775,6 +775,10 @@ exports.default = {
       watched: false
     };
     _httpRequest2.default.post(this.endpoint, movieObj, callback);
+  },
+  put: function put(movie, callback) {
+    movie.watched = !movie.watched;
+    _httpRequest2.default.put(this.endpoint, movie, callback);
   }
 };
 
