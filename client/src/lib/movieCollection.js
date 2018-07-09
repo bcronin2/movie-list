@@ -8,7 +8,7 @@ export default {
   post: function(movie, callback) {
     var movieObj = {
       title: movie.title,
-      year: movie.release_date.split("-")[0],
+      year: Number(movie.release_date.split("-")[0]),
       rating: movie.vote_average,
       poster: movie.poster_path || "default",
       watched: false

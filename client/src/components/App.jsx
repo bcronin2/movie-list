@@ -13,14 +13,15 @@ export default class App extends React.Component {
       movieList: props.movieList,
       movieListSearchQuery: "",
       filterValue: this.props.filterValues["all"],
-      databaseResults: []
+      imdbResults: []
     };
+    this.retrieveMovies();
   }
 
   addMovie(movie) {
-    if (movie && !this.hasTitle(movie.title)) {
+    if (movie) {
       movieCollection.post(movie, this.retrieveMovies.bind(this));
-      this.setState({ databaseResults: [] });
+      this.setState({ imdbResults: [] });
     }
   }
 
@@ -31,21 +32,12 @@ export default class App extends React.Component {
   }
 
   // refreshMovieList(movies) {
-  //   this.setState({ movieList: movies, databaseResults: [] });
+  //   this.setState({ movieList: movies, imdbResults: [] });
   //   if (this.inputField) {
   //     this.inputField.value = "";
   //     this.inputField.focus();
   //   }
   // }
-
-  hasTitle(title) {
-    return this.state.movieList.reduce(
-      (containsMovie, currentMovie) =>
-        containsMovie ||
-        currentMovie.title.toLowerCase() === title.toLowerCase(),
-      false
-    );
-  }
 
   handleMovieListSearch(event) {
     this.setState({ movieListSearchQuery: event.target.value.toLowerCase() });
@@ -60,10 +52,10 @@ export default class App extends React.Component {
     this.refreshMovieList();
   }
 
-  handleDatabaseSearch(event) {
+  handleIMDBSearch(event) {
     this.inputField = event.target;
-    IMDB.search(event.target.value, databaseResults => {
-      this.setState({ databaseResults: databaseResults });
+    IMDB.search(event.target.value, imdbResults => {
+      this.setState({ imdbResults: imdbResults });
     });
   }
 
@@ -73,8 +65,8 @@ export default class App extends React.Component {
         <div className="heading"> My Movies </div>
         <div className="inputs">
           <FindAndAdd
-            search={this.handleDatabaseSearch.bind(this)}
-            results={this.state.databaseResults.slice(0, 5)}
+            search={this.handleIMDBSearch.bind(this)}
+            results={this.state.imdbResults.slice(0, 5)}
             select={this.addMovie.bind(this)}
           />
           <Search search={this.handleMovieListSearch.bind(this)} />

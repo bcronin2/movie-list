@@ -7,5 +7,6 @@ client/dist/
 ## package-lock ##
 package-lock.json
 
-## API keys ##
+## credentials ##
 client/src/config/
+server/config/

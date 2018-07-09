@@ -186,17 +186,18 @@ var App = function (_React$Component) {
       movieList: props.movieList,
       movieListSearchQuery: "",
       filterValue: _this.props.filterValues["all"],
-      databaseResults: []
+      imdbResults: []
     };
+    _this.retrieveMovies();
     return _this;
   }
 
   _createClass(App, [{
     key: "addMovie",
     value: function addMovie(movie) {
-      if (movie && !this.hasTitle(movie.title)) {
+      if (movie) {
         _movieCollection2.default.post(movie, this.retrieveMovies.bind(this));
-        this.setState({ databaseResults: [] });
+        this.setState({ imdbResults: [] });
       }
     }
   }, {
@@ -210,20 +211,13 @@ var App = function (_React$Component) {
     }
 
     // refreshMovieList(movies) {
-    //   this.setState({ movieList: movies, databaseResults: [] });
+    //   this.setState({ movieList: movies, imdbResults: [] });
     //   if (this.inputField) {
     //     this.inputField.value = "";
     //     this.inputField.focus();
     //   }
     // }
 
-  }, {
-    key: "hasTitle",
-    value: function hasTitle(title) {
-      return this.state.movieList.reduce(function (containsMovie, currentMovie) {
-        return containsMovie || currentMovie.title.toLowerCase() === title.toLowerCase();
-      }, false);
-    }
   }, {
     key: "handleMovieListSearch",
     value: function handleMovieListSearch(event) {
@@ -241,13 +235,13 @@ var App = function (_React$Component) {
       this.refreshMovieList();
     }
   }, {
-    key: "handleDatabaseSearch",
-    value: function handleDatabaseSearch(event) {
+    key: "handleIMDBSearch",
+    value: function handleIMDBSearch(event) {
       var _this3 = this;
 
       this.inputField = event.target;
-      _IMDB2.default.search(event.target.value, function (databaseResults) {
-        _this3.setState({ databaseResults: databaseResults });
+      _IMDB2.default.search(event.target.value, function (imdbResults) {
+        _this3.setState({ imdbResults: imdbResults });
       });
     }
   }, {
@@ -267,8 +261,8 @@ var App = function (_React$Component) {
           "div",
           { className: "inputs" },
           _React2.default.createElement(_FindAndAdd.FindAndAdd, {
-            search: this.handleDatabaseSearch.bind(this),
-            results: this.state.databaseResults.slice(0, 5),
+            search: this.handleIMDBSearch.bind(this),
+            results: this.state.imdbResults.slice(0, 5),
             select: this.addMovie.bind(this)
           }),
           _React2.default.createElement(_Search.Search, { search: this.handleMovieListSearch.bind(this) })
@@ -775,7 +769,7 @@ exports.default = {
   post: function post(movie, callback) {
     var movieObj = {
       title: movie.title,
-      year: movie.release_date.split("-")[0],
+      year: Number(movie.release_date.split("-")[0]),
       rating: movie.vote_average,
       poster: movie.poster_path || "default",
       watched: false
