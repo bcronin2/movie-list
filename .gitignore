@@ -1,9 +1,6 @@
 ## NPM ##
 node_modules/
 
-## dist ##
-client/dist/
-
 ## package-lock ##
 package-lock.json
 
@@ -12,3 +9,4 @@ client/src/config/
 server/config/
 
 .DS_Store
+client/dist/
