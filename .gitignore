@@ -10,3 +10,5 @@ package-lock.json
 ## credentials ##
 client/src/config/
 server/config/
+
+.DS_Store
